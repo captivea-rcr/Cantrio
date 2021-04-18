@@ -67,7 +67,7 @@ class IrAttachment(models.Model):
     # Actions
     #----------------------------------------------------------
     
-    @api.multi
+    #@api.multi
     def action_migrate(self):
         self.migrate()
     
@@ -95,7 +95,7 @@ class IrAttachment(models.Model):
         self.search(record_domain).migrate()
         return True
     
-    @api.multi
+    #@api.multi
     def migrate(self):
         record_count = len(self)
         storage = self._storage().upper()
@@ -107,7 +107,7 @@ class IrAttachment(models.Model):
     # Read
     #----------------------------------------------------------
     
-    @api.multi
+    #@api.multi
     def _compute_mimetype(self, values):
         if self.env.context.get('migration') and len(self) == 1:
             return self.mimetype or 'application/octet-stream'
@@ -118,7 +118,7 @@ class IrAttachment(models.Model):
     # Create, Write, Delete
     #----------------------------------------------------------
     
-    @api.multi
+    #@api.multi
     def _inverse_datas(self):
         location = self._storage()
         for attach in self:

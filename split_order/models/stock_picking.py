@@ -362,7 +362,7 @@ class StockPicking(models.Model):
         ('name_uniq', 'unique(company_id)', 'Reference must be unique per company!'),
     ]
 
-    @api.multi
+    #@api.multi
     def _compute_show_check_availability(self):
         for picking in self:
             has_moves_to_reserve = any(
@@ -379,7 +379,7 @@ class StockPicking(models.Model):
         if not self.full and self.move_lines:
             self.scheduled_date2 = min(self.move_lines.mapped('date_expected'))
 
-    @api.multi
+    #@api.multi
     def remove_hold(self):
         self.state = 'confirmed'
         self.move_lines.write({'state': 'confirmed'})
@@ -405,7 +405,7 @@ class StockPicking(models.Model):
             #     vals['count'] = 1
         return super(StockPicking, self).create(vals)
 
-    @api.multi
+    #@api.multi
     def schedule_picking(self):
         # """Use to trigger the wizard from button with correct context"""
         
@@ -425,7 +425,7 @@ class StockPicking(models.Model):
             
         }
 
-    @api.multi
+    #@api.multi
     def split_picking(self):
         # """Use to trigger the wizard from button with correct context"""
         
@@ -447,7 +447,7 @@ class StockPicking(models.Model):
                 
             }
 
-    @api.multi
+    #@api.multi
     def picking_split(self, scheduling=False):
         if self.sale_id.delivery_count >= self.sale_id.max_delivery:
             raise UserError(

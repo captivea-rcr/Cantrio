@@ -14,7 +14,7 @@ class CreateProjectWizard(models.TransientModel):
         'project.template', string='Project template',
         help='Base the project off of this template')
 
-    @api.multi
+    #@api.multi
     def create_project(self):
         self.ensure_one()
         vals = {

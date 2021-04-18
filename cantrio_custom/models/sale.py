@@ -43,7 +43,7 @@ class SaleOrder(models.Model):
                               default=_get_default_team, oldname='section_id',
                               domain=lambda self: self.get_team_domain())
 
-    @api.multi
+    #@api.multi
     def preview_sale_order(self):
         self.ensure_one()
         return {

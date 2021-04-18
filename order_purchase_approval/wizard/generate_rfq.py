@@ -38,7 +38,7 @@ class GenerateRFQ(models.TransientModel):
 
     line_ids = fields.One2many("generate.rfq.item", "wizard_id", "Lines")
 
-    @api.multi
+    #@api.multi
     def action_generate_rfq(self):
         rfq_ids = []
         grouped_lines = {}

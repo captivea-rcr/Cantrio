@@ -187,7 +187,7 @@ class SaleOrderLine(models.Model):
 
     product_image = fields.Binary('Product Image', related="product_id.image", store=False, readonly=True)
 
-    @api.multi
+    #@api.multi
     def _action_launch_stock_rule(self):
         if self.env.context.get('schedule_delivery', False):
             schedule_id = self.env['schedule.delivery'].browse(self.env.context.get('schedule_delivery'))

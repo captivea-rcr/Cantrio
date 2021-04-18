@@ -9,6 +9,6 @@ class TaskAttachment(models.TransientModel):
     task_id = fields.Many2one('project.task', string='Task')
     attachment_ids = fields.Many2many('ir.attachment', string='Attachments')
 
-    @api.multi
+    #@api.multi
     def save_attachments(self):
         self.task_id.attachment_ids = self.attachment_ids

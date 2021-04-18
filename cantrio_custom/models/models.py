@@ -34,7 +34,7 @@ class Invoice(models.Model):
     sequence_number_next = fields.Char(string='Next Number', compute="_get_sequence_number_next", inverse="_set_sequence_next")
     sequence_number_next_prefix = fields.Char(string='Next Number Prefix', compute="_get_sequence_prefix")
 
-    @api.multi
+    #@api.multi
     def invoice_validate(self):
         res = super(Invoice, self).invoice_validate()
         order = self.env['sale.order'].search([('name', '=', self.origin)])
@@ -168,7 +168,7 @@ class ResPartner(models.Model):
 class StockRule(models.Model):
     _inherit = 'stock.rule'
 
-    @api.multi
+    #@api.multi
     def _run_buy(self, product_id, product_qty, product_uom, location_id, name, origin, values):
         cache = {}
         a = 2+2

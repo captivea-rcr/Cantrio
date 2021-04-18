@@ -13,7 +13,7 @@ class Product(models.Model):
     cost_tariff = fields.Float('Tariff')
     cost_ldp = fields.Float('LDP Cost', compute='_compute_cost_ldp')
 
-    @api.multi
+    #@api.multi
     @api.depends('cost_freight_duties', 'cost_tariff', 'standard_price')
     def _compute_cost_ldp(self):
         for rec in self:
@@ -25,14 +25,14 @@ class Product(models.Model):
                     ldp_cost += rec.standard_price * (rec.cost_tariff/100)
                 rec.cost_ldp = ldp_cost
 
-    @api.multi
+    #@api.multi
     @api.depends('type')
     def _get_type_custom(self):
         for rec in self:
             if not rec.type == 'consu':
                 rec.type_custom = rec.type
 
-    @api.multi
+    #@api.multi
     def _set_type_custom(self):
         for rec in self:
             rec.type = rec.type_custom
@@ -181,7 +181,7 @@ class Product(models.Model):
                 {'name': supplier.id, 'product_tmpl_id': res.id})
         return res
 
-    @api.multi
+    #@api.multi
     def name_get(self):
         def _name_get(d):
             name = d.get('name', '')
@@ -204,7 +204,7 @@ class Product(models.Model):
 class ProductProduct(models.Model):
     _inherit = "product.product"
 
-    @api.multi
+    #@api.multi
     def name_get(self):
         def _name_get(d):
             name = d.get('name', '')

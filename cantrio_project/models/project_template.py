@@ -19,7 +19,7 @@ class ProjectTemplate(models.Model):
 class ProjectTemplateTask(models.Model):
     _name = 'project.template.task'
 
-    @api.multi
+    #@api.multi
     @api.depends('template_id.type_ids')
     def _get_education_domain(self):
         for rec in self:

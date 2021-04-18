@@ -86,14 +86,14 @@ class PickingSplit(models.TransientModel):
             for line in all_prod_lines:
                 line.product_qty_left = total_to_ship - total_delivered
 
-    # @api.multi
+    # #@api.multi
     # def put_remaining(self):
     #     delivery = self.env.context.get('delivery')
     #     if delivery == 1:
     #         for line in self.delivery_1:
     #             line.product_uom_qty += line.product_qty_left
 
-    @api.multi
+    #@api.multi
     def generate_deliveries(self):
         if self.picking_id.sale_id.delivery_count + (self.delivery_number - 1) > self.picking_id.sale_id.max_delivery:
             raise UserError(
@@ -145,7 +145,7 @@ class PickingSplit(models.TransientModel):
             move._action_confirm()
         return True
 
-    @api.multi
+    #@api.multi
     def split_delivery(self):
         original_products = {}
         split_products = {}
@@ -261,7 +261,7 @@ class PickingSplitDeliveryLine(models.TransientModel):
         'Qty. left', digits=dp.get_precision('Product Unit of Measure'),
         help='The quantity that is still left to be shipped.')
 
-    @api.multi
+    #@api.multi
     def ship_remaining(self):
         self.wizard_id.onchange_delivery_lines()
         self.product_uom_qty += self.product_qty_left

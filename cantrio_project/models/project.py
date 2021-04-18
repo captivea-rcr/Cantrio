@@ -12,7 +12,7 @@ class ProjectProject(models.Model):
     developer_id = fields.Many2one('res.partner', string='Developer')
     designer_id = fields.Many2one('res.partner', string='Designer')
 
-    @api.multi
+    #@api.multi
     @api.depends('task_ids', 'task_ids.task_done')
     def _compute_project_stage(self):
         for rec in self:
@@ -49,7 +49,7 @@ class ProjectTask(models.Model):
         'res.partner', string='Designer', related='project_id.designer_id')
     requires_attachment = fields.Boolean('Requires attachment')
 
-    @api.multi
+    #@api.multi
     @api.onchange('task_done')
     def _onchange_task_done(self):
         if self.task_done:
@@ -58,7 +58,7 @@ class ProjectTask(models.Model):
         else:
             return {'value': {'date_complete ': False}}
 
-    @api.multi
+    #@api.multi
     def action_get_attachments(self):
         return {
             'name': "Task attachments",
@@ -73,7 +73,7 @@ class ProjectTask(models.Model):
             },
         }
 
-    @api.multi
+    #@api.multi
     def action_change_deadline(self):
         return {
             'name': "Change task deadline",
@@ -87,7 +87,7 @@ class ProjectTask(models.Model):
             },
         }
 
-    @api.multi
+    #@api.multi
     def action_task_done_toggle(self):
         if not self.task_done:
             if self.requires_attachment and len(self.attachment_ids) < 1:

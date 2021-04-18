@@ -35,7 +35,7 @@ class sale_discount(models.Model):
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
 
-    @api.multi
+    #@api.multi
     def action_confirm(self):
         discnt = 0.0
         no_line = 0.0
@@ -49,7 +49,7 @@ class sale_discount(models.Model):
                 return True
         super(sale_discount, self).action_confirm()
 
-    @api.multi
+    #@api.multi
     def action_approve(self):
         super(sale_discount, self).action_confirm()
         return True

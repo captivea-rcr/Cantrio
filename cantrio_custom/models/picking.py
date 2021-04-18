@@ -23,7 +23,7 @@ class PickingType(models.Model):
     count_picking_done = fields.Integer(
         'Done', compute='_compute_count_picking_done')
 
-    @api.multi
+    #@api.multi
     def _compute_count_picking_done(self):
         for rec in self:
             count = self.env['stock.picking'].search_count(

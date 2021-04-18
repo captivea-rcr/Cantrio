@@ -107,16 +107,16 @@ class OrderLineWarehouse(models.Model):
     approved_quantity = fields.Float("Approved Quantity")
     order_detail_ids = fields.One2many("order.warehouse.detail", "order_warehouse_id", "Order Details")
 
-    @api.multi
+    #@api.multi
     def do_nothing(self):
         return True
 
-    @api.multi
+    #@api.multi
     def generate_rfq(self):
         action = self.env.ref("order_purchase_approval.generate_rfq_form_action").read()[0]
         return action
 
-    @api.multi
+    #@api.multi
     def action_detail(self):
         # action = self.env.ref("order_purchase_approval.open_detail_form_action").read()[0]
         return {

@@ -48,7 +48,7 @@ class ResConfigSettings(models.TransientModel):
     # Functions
     #----------------------------------------------------------
     
-    @api.multi 
+    #@api.multi
     def set_values(self):
         res = super(ResConfigSettings, self).set_values()
         param = self.env['ir.config_parameter'].sudo()

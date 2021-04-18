@@ -11,6 +11,6 @@ class TaskChangeDeadline(models.TransientModel):
         'Current deadline', related='task_id.date_deadline')
     new_deadline = fields.Date('New deadline', required=True)
 
-    @api.multi
+    #@api.multi
     def change_deadline(self):
         self.task_id.date_deadline = self.new_deadline

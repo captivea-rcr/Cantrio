@@ -76,7 +76,7 @@ class SaleOrder(models.Model):
                 for line in order.order_line:
                     line.discount = discount
 
-    @api.multi
+    #@api.multi
     def _prepare_invoice(self,):
         invoice_vals = super(SaleOrder, self)._prepare_invoice()
         invoice_vals.update({
@@ -85,7 +85,7 @@ class SaleOrder(models.Model):
         })
         return invoice_vals
 
-    @api.multi
+    #@api.multi
     def button_dummy(self):
         self.supply_rate()
         return True
@@ -94,7 +94,7 @@ class SaleOrder(models.Model):
 class AccountTax(models.Model):
     _inherit = 'account.tax'
 
-    @api.multi
+    #@api.multi
     def compute_all(self, price_unit, currency=None, quantity=1.0, product=None, partner=None):
         if len(self) == 0:
             company_id = self.env.user.company_id

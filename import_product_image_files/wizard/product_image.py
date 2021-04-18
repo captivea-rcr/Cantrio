@@ -23,7 +23,7 @@ class Generate(models.TransientModel):
     success = fields.Integer("Success")
     failed = fields.Integer("Failed")
 
-    @api.multi
+    #@api.multi
     def generate_image(self):
         files_in_dir = os.listdir(self.image_path)
         success = 0

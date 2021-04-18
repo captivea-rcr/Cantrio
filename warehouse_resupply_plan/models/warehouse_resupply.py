@@ -88,7 +88,7 @@ class WarehouseResupply(models.Model):
     stock_seam = fields.Float("Warehouse SEAM", compute="get_stock_seam")
     date_expected = fields.Datetime("Expected Date", related="stock_move_id.date_expected")
 
-    @api.multi
+    #@api.multi
     def generate_transfer(self):
         action = self.env.ref('warehouse_resupply_plan.generate_transfer_form_action').read()[0]
         return action

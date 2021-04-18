@@ -97,7 +97,7 @@ class ResupplyTransfer(models.TransientModel):
         picking.action_confirm()
         return picking.id
 
-    @api.multi
+    #@api.multi
     def action_generate_transfer(self):
         picking_ids = []
         grouped_lines = {}

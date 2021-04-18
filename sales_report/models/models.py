@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     project_name = fields.Char(track_visibility='onchange')
     purchase_order = fields.Char(string="Purchase Order",track_visibility='onchange')
 
-    @api.multi
+    #@api.multi
     def print_quotation_attachment(self):
 
         order = self

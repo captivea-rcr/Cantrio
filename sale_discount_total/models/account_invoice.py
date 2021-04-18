@@ -68,7 +68,7 @@ class AccountInvoice(models.Model):
                 for line in inv.invoice_line_ids:
                     line.discount = discount
 
-    @api.multi
+    #@api.multi
     def compute_invoice_totals(self, company_currency, invoice_move_lines):
         total = 0
         total_currency = 0
@@ -91,7 +91,7 @@ class AccountInvoice(models.Model):
                 total_currency -= line['amount_currency'] or line['price']
         return total, total_currency, invoice_move_lines
 
-    @api.multi
+    #@api.multi
     def button_dummy(self):
         self.supply_rate()
         return True

@@ -6,7 +6,7 @@ class SaleOrder(models.Model):
 
     project_id = fields.Many2one('project.project', string='Project')
 
-    @api.multi
+    #@api.multi
     def action_create_project(self):
         self.ensure_one()
         view = self.env.ref('cantrio_project.create_project_form')

@@ -48,7 +48,7 @@ class Presentation(models.Model):
             'url': self.get_portal_url(report_type='pdf'),
         }
 
-    @api.multi
+    #@api.multi
     def print_presentation(self):
 
         return self.env.ref('cantrio_presentation.action_report_presentation').report_action(self)
