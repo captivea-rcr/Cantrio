@@ -1,0 +1,97 @@
+<odoo>
+    <data>
+
+
+        <record model="ir.ui.view" id="presentation_tree">
+            <field name="name">presentation.tree</field>
+            <field name="model">presentation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="pre_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="presentation_form">
+            <field name="name">presentation.form</field>
+            <field name="model">presentation</field>
+            <field name="arch" type="xml">
+                <form name="Presentation">
+                    <header>
+                        <button name="print_presentation" string="Print" type="object" class="btn-primary"/>
+                        <button name="preview_presentation" string="Preview" type="object"/>
+                        <button name="create_quote" string="Convert to Quotation" type="object" class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="pre_date"/>
+                                <field name="group_by_category"/>
+                                <field name="show_price"/>
+
+                            </group>
+                            <group>
+                                <field name="cover_image" widget="image"/>
+                            </group>
+                            <field name="product_line">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_image" widget="image" class="oe_avatar"/>
+                                    <field name="pres_category_id"/>
+                                    <field name="category_id"/>
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="price"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_presentation">
+            <field name="name">Presentation</field>
+            <field name="res_model">presentation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <menuitem name="Presentations" id="menu_presentation" parent="sale.sale_menu_root"
+                  sequence="7" groups="sales_team.group_sale_salesman"
+                  action="action_presentation"/>
+        <!-- <menuitem name="Server to list" id="custom/cantrio_presenatation" parent="custom/cantrio_presenatation.menu_2"
+                  action="custom/cantrio_presenatation.action_server"/> -->
+        <record id="paperformat_us_custom" model="report.paperformat">
+            <field name="name">US Letter</field>
+            <field name="default" eval="True" />
+            <field name="format">Letter</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">5</field>
+            <field name="dpi">90</field>
+        </record>
+        <report
+                id="action_report_presentation"
+                string="Presentation"
+                model="presentation"
+                report_type="qweb-pdf"
+                file="cantrio_presentation.report_presentation"
+                name="cantrio_presentation.report_presentation"
+                print_report_name="'Presentation - %s' % (object.name)"
+                paperformat="paperformat_us_custom"
+        />
+    </data>
+</odoo>

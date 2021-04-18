@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+        <record id="product_template_only_form_view_extend_cantrio" model="ir.ui.view">
+            <field name="name">product.template.view.form.easy.buttons</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="arch" type="xml">
+                <button name="toggle_active" position="before">
+                    <button class="oe_stat_button" type="action" name="%(cantrio_order_line.act_open_sale_order_line_view_product)d"
+                        icon="fa-history">
+                        <span>Product Price History</span>
+                    </button>
+                </button>
+            </field>
+        </record>
+</odoo>

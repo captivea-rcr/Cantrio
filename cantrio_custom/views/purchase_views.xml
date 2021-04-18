@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_purchase_order_filter_cant_inherit" model="ir.ui.view">
+            <field name="name">po.search.cant.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="order_line" string="Product Description" filter_domain="['|', ('order_line.name', 'ilike', self), ('order_line.product_id.description_sale', 'ilike', self)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="cantrio_custom_rfq_tree">
+            <field name="name">cantrio.custom.rfq.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_planned']" position="replace">
+                    <field name="date_planned" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="cantrio_custom_rfq_form">
+            <field name="name">cantrio.custom.rfq.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="date_order" position="after">
+                    <field name="date_planned" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}"/>
+                    <field name="developer_id"/>
+                    <field name="designer_id"/>
+                </field>
+                <xpath expr="//page[@name='purchase_delivery_invoice']//field[@name='date_planned']" position="replace">
+                </xpath>
+                <xpath expr="//label[@for='date_planned']" position="replace"/>
+            </field>
+        </record>
+
+        <menuitem action="purchase.purchase_rfq" id="purchase.menu_purchase_rfq"
+            parent="purchase.menu_purchase_root" name="RFQ"
+            sequence="0"/>
+
+        <menuitem action="purchase.purchase_form_action" id="purchase.menu_purchase_form_action"
+                  parent="purchase.menu_purchase_root" sequence="1"/>
+
+        <menuitem id="purchase.menu_procurement_management_supplier_name" name="Vendors"
+            parent="purchase.menu_purchase_root"
+            action="base.action_partner_supplier_form" sequence="2"/>
+
+        <menuitem id="purchase.menu_procurement_management" name="Purchase"
+            parent="purchase.menu_purchase_root" sequence="3" />
+
+
+
+    </data>
+</odoo>

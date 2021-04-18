@@ -1,0 +1,37 @@
+<odoo>
+<data>
+    <record id="generate_rfq_form" model="ir.ui.view">
+        <field name="name">Generate RFQ</field>
+        <field name="model">generate.rfq</field>
+        <field name="arch" type="xml">
+            <form string="Generate RFQ">
+                <separator string="Details" />
+                <field name="line_ids" colspan="2" nolabel="1">
+                    <tree editable="bottom">
+                        <field name="product_id" required="1" />
+                        <field name="quantity" />
+                        <field name="partner_id" required="1" />
+                    </tree>
+                </field>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Generate" type="object" class="oe_highlight" name="action_generate_rfq"/>
+                            <button string="Cancel" class="oe_link" special="cancel" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="generate_rfq_form_action"
+        name="Generate RFQ"
+        src_model="order.line.warehouse"
+        res_model="generate.rfq"
+        view_type="form"
+        view_mode="form"
+        key2="client_action_multi"
+        view_id="generate_rfq_form"
+        target="new"/>
+</data>
+</odoo>

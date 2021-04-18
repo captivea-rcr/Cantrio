@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="create_project_form" model="ir.ui.view">
+        <field name="name">create.project.wizard.form</field>
+        <field name="model">create.project.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="type" widget="radio"/>
+                    <field name="project_template_id"/>
+                </group>
+                <footer>
+                    <button name="create_project" type="object" string="Create" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

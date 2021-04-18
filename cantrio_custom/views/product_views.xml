@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="inherit_product_custom">
+            <field name="name">inherit.product.custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <!--                <xpath expr="//label[@for='standard_price']" position="replace">-->
+                <!--                    <label for="standard_price" groups="base.group_user" invisible="1"/>-->
+                <!--                </xpath>-->
+                <xpath expr="//div[@name='standard_price_uom']" position="after">
+                    <field name="cost_freight_duties" groups="cantrio_custom.group_sale_director"/>
+                    <field name="cost_tariff" groups="cantrio_custom.group_sale_director"/>
+                    <field name="cost_ldp" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}" groups="cantrio_custom.group_sale_director"/>
+                </xpath>
+                <field name="type" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="type" position="after">
+                    <field name="type_custom"/>
+                </field>
+                <button name="toggle_active" position="before">
+                    <button name="view_order" type="object" class="oe_stat_button" icon="fa-file-text">
+                        <field name="order_count" widget="statinfo" string="Orders"/>
+                    </button>
+                    <button name="view_quote" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                        <field name="quote_count" widget="statinfo" string="Quotes"/>
+                    </button>
+                    <button class="oe_stat_button" name="view_quote" type="object" icon="fa-signal">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="quotation_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                <field name="uom_name"/>
+                            </span>
+                            <span class="o_stat_text">Quote</span>
+                        </div>
+                    </button>
+                </button>
+                <field name="categ_id" position="attributes">
+                    <attribute name="options">{'no_create_edit':True,'no_create':True}</attribute>
+                    <!-- <field name="categ_id" string="Product Category" options="'no_create_edit':True" /> -->
+                </field>
+            </field>
+        </record>
+<!-- 
+        <record model="ir.ui.view" id="inherit_product_custom_sales_director">
+            <field name="name">inherit.product.custom</field>
+            <field name="model">product.template</field>
+            <field name="groups_id" eval="[(4, ref('cantrio_custom.group_sale_director'))]"/>
+            <field name="inherit_id" ref="cantrio_custom.inherit_product_custom"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']/attribute[1]" position="replace">
+                    <attribute name="options">{'no_create_edit':False}</attribute>
+                </xpath>
+
+                <field name="categ_id" position="replace">
+                    <field name="categ_id" string="Product Category" options="'no_create_edit':False" />
+                </field>
+
+            </field>
+        </record>
+ -->
+        <record model="ir.ui.view" id="inherit_product_template_only_custom">
+            <field name="name">Product Template Only Custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="attributes">
+                    <attribute name="groups">cantrio_custom.group_sale_director</attribute>
+                </field>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="inherit_product_template_only_custom_director">
+            <field name="name">Product Template Only Custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="groups_id" eval="[(4, ref('cantrio_custom.group_sale_director'))]"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="attributes">
+                    <attribute name="options">{'no_create_edit':False,'no_create':False}</attribute>
+                    <!-- <field name="categ_id" string="Product Category" options="'no_create_edit':True" /> -->
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="cantrio_inherit_product_normal_form_view">
+            <field name="name">Product Custom</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="attributes">
+                    <attribute name="groups">cantrio_custom.group_sale_director</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="cantrio_inherit_product_template_kanban_view">
+            <field name="name">Product Custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban/templates/t/div/div[2]/strong" position="replace">
+                    <strong class="o_kanban_record_title">
+                        <field name="name"/>
+                    </strong>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

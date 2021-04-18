@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="split_order_sales_form">
+            <field name="name">split.order.sale.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_term_id" position="after">
+                    <field name="max_delivery" string="Max Delivery" required="1"/>
+                    <field name="user_id"/>
+                    <field name="team_id" options="{'no_create': True}"/>
+
+                </field>
+                <xpath expr="//button[@id='action_confirm']" position="replace">
+                    <button name="action_schedule" id="action_confirm"
+                            string="Confirm" class="btn-primary" type="object"
+                            attrs="{'invisible': [('state', 'not in', ['sent'])]}"/>
+                </xpath>
+                <xpath expr="//button[@name='action_confirm']" position="replace">
+                    <button name="action_schedule"
+                            string="Confirm" type="object"
+                            attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+                </xpath>
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_done']" position="after">
+                    <button name="action_duplicate2"
+                            string="Revise" type="object"
+                    />
+                    <button name="action_cancel" states="draft,sent,sale" type="object" string="Void"/>
+                </xpath>
+                <xpath expr="//group[@name='sales_person']//field[@name='user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//group[@name='sales_person']//field[@name='team_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//group[@name='sale_shipping']//field[@name='commitment_date']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <field name="partner_invoice_id" position="replace">
+                    <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice', 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>
+                </field>
+                <field name="partner_shipping_id" position="replace">
+                    <field name="partner_shipping_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery', 'show_address': 1}" options="{&quot;always_reload&quot;: True}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="sale_stock.view_order_form_inherit_sale_stock" model="ir.ui.view">
+            <field name="name">sale.order.form.sale.stock</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_view_invoice']" position="before">
+                    <field name="picking_ids" invisible="1"/>
+                    <button type="object"
+                            name="action_view_delivery"
+                            class="oe_stat_button"
+                            icon="fa-truck"
+                            attrs="{'invisible': [('delivery_count', '=', 0)]}" groups="base.group_user">
+                        <field name="delivery_count" widget="statinfo" string="Delivery"/>
+                    </button>
+                </xpath>
+                <xpath expr="//group[@name='sale_shipping']" position="attributes">
+                    <attribute name="groups"></attribute> <!-- Remove the res.group on the group and set it on the field directly-->
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="warehouse_id" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                    <field name="incoterm" widget="selection" groups="sale_stock.group_display_incoterm"/>
+                    <field name="picking_policy" required="True"/>
+                    <field name="commitment_date" groups="sale.group_sale_order_dates"/>
+                </xpath>
+
+                <xpath expr="//page/field[@name='order_line']/form/group/group/field[@name='tax_id']" position="before">
+                    <field name="product_packaging" attrs="{'invisible': [('product_id', '=', False)]}" context="{'default_product_id': product_id, 'tree_view_ref':'product.product_packaging_tree_view', 'form_view_ref':'product.product_packaging_form_view'}" domain="[('product_id','=',product_id)]" groups="product.group_stock_packaging" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form/group/group/field[@name='price_unit']" position="before">
+                    <field name="route_id" groups="sale_stock.group_route_so_lines" options="{'no_create': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                    <field name="route_id" groups="sale_stock.group_route_so_lines" options="{'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <report
+                id="sale.action_report_saleorder"
+                string="Quotation / Order"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="sale.report_saleorder"
+                name="sale.report_saleorder"
+                print_report_name="(object.state in ('draft', 'sent') and 'Quotation%s - %s - %s' % (object.name, object.partner_id.name,(object.project_name or ''))) or 'Order%s - %s - %s' % (object.name, object.partner_id.name,(object.project_name or ''))"
+        />
+
+    </data>
+</odoo>

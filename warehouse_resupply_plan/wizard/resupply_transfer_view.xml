@@ -1,0 +1,48 @@
+<odoo>
+<data>
+    <record id="generate_transfer_form" model="ir.ui.view">
+        <field name="name">Generate Transfer</field>
+        <field name="model">resupply.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Generate Transfer">
+                <separator string="Details" />
+                <field name="line_ids" colspan="2" nolabel="1">
+                    <tree create="0" editable="1">
+                        <field name="dest_location_id" domain="[('usage','=','internal')]" />
+                        <field name="product_id" />
+                        <field name="quantity" />
+                        <field name="product_uom" />
+                        <field name="stock_njcb" readonly="1" />
+                        <field name="transfer_njcb" />
+                        <field name="stock_njcbr" readonly="1" />
+                        <field name="transfer_njcbr" />
+                        <field name="stock_njt" readonly="1" />
+                        <field name="transfer_njt" />
+                        <field name="stock_laipn" readonly="1" />
+                        <field name="transfer_laipn" />
+                        <field name="stock_seam" readonly="1" />
+                        <field name="transfer_seam" />
+                    </tree>
+                </field>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Generate" type="object" class="oe_highlight" name="action_generate_transfer"/>
+                            <button string="Cancel" class="oe_link" special="cancel" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="generate_transfer_form_action"
+        name="Generate Transfer"
+        src_model="warehouse.resupply"
+        res_model="resupply.transfer"
+        view_type="form"
+        view_mode="form"
+        key2="client_action_multi"
+        view_id="generate_transfer_form"
+        target="new"/>
+</data>
+</odoo>

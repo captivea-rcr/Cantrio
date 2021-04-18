@@ -1,0 +1,49 @@
+<odoo>
+  <data>
+    
+    <record model="ir.ui.view" id="sales_report.form">
+      <field name="name">sales.report.form</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+         <field name="payment_term_id" position="after">
+            <field name="project_name" string="Project Name"/>
+            <field name="purchase_order"/>
+          </field>
+        <xpath expr="//tree/field[@name='product_id']" position="before">
+          <field name="product_image" widget="image" class="oe_avatar"/>
+        </xpath>
+        <button name="action_cancel" position="before">
+          <button name="print_quotation_attachment" string="Print with Attachment" type="object" class="o_sale_print"/>
+        </button>
+      </field>
+    </record>
+    
+    <record model="ir.ui.view" id="invoice_form_report">
+      <field name="name">invoice.form.report</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">
+         <field name="user_id" position="after">
+            <field name="project_name" string="Project Name"/>
+            <!-- <field name="purchase_order"/> -->
+          </field>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="inherit_product_custom_pdf">
+      <field name="name">inherit.product.custom.pdf</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_form_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//page[@name='general_information']/group[2]" position="after">
+          <group name="files">
+            <field name="files" widget="many2many_binary"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+  </data>
+
+
+</odoo>

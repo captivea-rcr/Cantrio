@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Top menu item -->
+    <menuitem name="Production Management"
+              id="project.menu_main_pm"
+              groups="project.group_project_manager,project.group_project_user"
+              web_icon="project,static/description/icon.png"
+              sequence="50"/>
+
+    <!-- Top menu item -->
+    <menuitem name="Sample Management"
+              id="project_menu_samples"
+              groups="project.group_project_manager,project.group_project_user"
+              web_icon="project,static/description/icon.png"
+              sequence="60"/>
+
+    <!-- Production menu main action -->
+    <record id="project.open_view_project_all" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="domain">[('sample_project','=',False)]</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="project.view_project_kanban"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="target">main</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new project
+            </p>
+        </field>
+    </record>
+
+    <!-- Production menu detailed action -->
+    <record id="open_view_project_production_detailed" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="domain">[('sample_project','=',False)]</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="cantrio_project.view_project_kanban_custom"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="target">main</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new project
+            </p>
+        </field>
+    </record>
+
+    <!-- Production all tasks action -->
+    <record id="project.action_view_task" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+        <field name="domain">[('project_id.sample_project','!=',True)]</field>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new task
+            </p><p>
+            Odoo's project management allows you to manage the pipeline of your tasks efficiently.<br/>
+            You can track progress, discuss on tasks, attach documents, etc.
+        </p>
+        </field>
+    </record>
+
+    <!-- Samples project menu main action -->
+    <record id="open_view_project_sample_simple" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="domain">[('sample_project','=',True)]</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="project.view_project_kanban"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="target">main</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new project
+            </p>
+        </field>
+    </record>
+
+    <!-- Samples project menu detailed action -->
+    <record id="open_view_project_sample_detailed" model="ir.actions.act_window">
+        <field name="name">Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_type">form</field>
+        <field name="domain">[('sample_project','=',True)]</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="cantrio_project.view_project_kanban_custom"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+        <field name="context">{'default_sample_project': True}</field>
+        <field name="target">main</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new sample project
+            </p>
+        </field>
+    </record>
+
+    <!-- Samples all tasks action -->
+    <record id="action_view_task_sample" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+        <field name="domain">[('project_id.sample_project','=',True)]</field>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+    </record>
+
+    <menuitem action="cantrio_project.open_view_project_production_detailed" id="menu_projects_production_detailed" name="Projects Detailed" parent="project.menu_main_pm" sequence="1"/>
+
+
+    <menuitem action="cantrio_project.open_view_project_sample_simple" id="menu_projects_samples" name="Projects" parent="project_menu_samples" sequence="1"/>
+    <menuitem action="cantrio_project.open_view_project_sample_detailed" id="menu_projects_samples_detailed" name="Projects Detailed" parent="project_menu_samples" sequence="2"/>
+    <menuitem name="All Tasks" id="menu_project_management_samples" parent="project_menu_samples"
+              action="cantrio_project.action_view_task_sample" sequence="3" groups="base.group_no_one,project.group_project_user"/>
+
+</odoo>

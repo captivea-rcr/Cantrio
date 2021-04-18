@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <!-- Override Products menuitem in stock module, remove from Master Data and move to top menu -->
+        <menuitem id="stock.menu_product_variant_config_stock" name="Products" action="stock.product_template_action_product"
+                  parent="stock.menu_stock_root" sequence="3"/>
+        <!-- Override Reordering rules menuitem in stock module, remove from Master Data and move to config menu -->
+        <menuitem id="stock.menu_reordering_rules_config" action="stock.action_orderpoint_form"
+                  name="Reordering Rules" parent="stock.menu_product_in_config_stock" sequence="10"/>
+
+        <record id="view_picking_form_cantrio" model="ir.ui.view">
+            <field name="name">stock.picking.form.cantrio</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="project_name"/>
+                    <field name="customer_purchase_order"/>
+                    <field name="contact_name"/>
+                    <field name="contact_phone"/>
+                    <field name="developer_id"/>
+                    <field name="designer_id"/>
+                </field>
+                <field name="partner_id" position="replace">
+                    <field name="partner_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options='{"always_reload": True}' string="Delivery Address"/>
+                    <field name="partner_invoice_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options='{"always_reload": True}' string="Invoice Address"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Done picking counter in Kanban view -->
+        <record id="stock_picking_type_kanban_done_count" model="ir.ui.view">
+            <field name="name">stock.picking.type.kanban.done</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
+            <field name="arch" type="xml">
+                <field name="count_picking_ready" position="before">
+                    <field name="count_picking_done"/>
+                </field>
+                <xpath expr="//div[@t-if='record.count_picking_ready.raw_value > 0']" position="before">
+                    <div t-if="record.count_picking_done.raw_value > 0" class="row">
+                        <div class="col-9">
+                            <a class="oe_kanban_stock_picking_type_list" name="%(stock.action_picking_tree_all)d" type="action"
+                               context="{'search_default_done': True, 'search_default_picking_type_id': [active_id]}">
+                                Done
+                            </a>
+                        </div>
+                        <div class="col-3">
+                            <field name="count_picking_done"/>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock.stock_picking_action_picking_type" model="ir.actions.act_window">
+            <field name="domain">[('state', '!=', 'done')]</field>
+        </record>
+
+
+    </data>
+</odoo>

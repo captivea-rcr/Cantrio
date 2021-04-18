@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="task_change_deadline_form" model="ir.ui.view">
+        <field name="name">task.change.deadline.form</field>
+        <field name="model">task.change.deadline</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="task_id" readonly="1"/>
+                    <field name="current_deadline"/>
+                    <field name="new_deadline"/>
+                </group>
+                <footer>
+                    <button name="change_deadline" type="object" string="Change deadline" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

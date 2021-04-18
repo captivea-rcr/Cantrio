@@ -1,0 +1,32 @@
+<odoo>
+<data>
+    <record model="ir.ui.view" id="fetch_resupply_data_form_view">
+        <field name="name">Generate Delivery Plan Report</field>
+        <field name="model">fetch.resupply.data</field>
+        <field name="arch" type="xml">
+            <form string="Generate Delivery Plan Report">
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Generate" type="object" class="oe_highlight" name="generate_data"/>
+                            <button string="Cancel" class="oe_link" special="cancel" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_fetch_resupply_data">
+        <field name="name">Generate Delivery Plan Report</field>
+        <field name="res_model">fetch.resupply.data</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="fetch_resupply_data_form_view"/>
+        <field name="target">new</field>
+    </record>
+    <menuitem
+        id="menu_fetch_resupply_data"
+        parent="stock.menu_warehouse_report"
+        action="action_fetch_resupply_data" sequence="30"/>
+</data>
+</odoo>

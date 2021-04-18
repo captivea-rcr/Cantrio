@@ -1,0 +1,26 @@
+<odoo>
+<data>
+    <record model="ir.ui.view" id="product_category_specification_form_view">
+        <field name="name">Product Category Specification</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <group name="first" position="after">
+                <group name="specification">
+                    <separator string="Specification" />
+                    <field name="specification_ids" colspan="2" nolabel="1">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle" />
+                            <field name="show_attribute" />
+                            <field name="name" required="1" />
+                        </tree>
+                        <form>
+                            <field name="name" />
+                        </form>
+                    </field>
+                </group>
+            </group>
+        </field>
+    </record>
+</data>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sale_order_schedule_form" model="ir.ui.view">
+            <field name="name">sale.order.schedule.form</field>
+            <field name="model">sale.order.schedule</field>
+            <field name="arch" type="xml">
+                <form>
+                    <p>Do You Want to Schedule a Delivery ?</p>
+                    <footer>
+                        <button name="schedule" string="Yes" type="object"
+                                class="btn-primary"/>
+                        <button name="no_schedule" string="No" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

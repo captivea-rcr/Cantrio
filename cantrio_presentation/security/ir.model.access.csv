@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_presentation,access.presentation,model_presentation,sales_team.group_sale_salesman,1,1,1,1
+access_product_line,access.product.line,model_product_line,sales_team.group_sale_salesman,1,1,1,1
+access_product_pres_categ,access.product.presentation.category,model_product_presentation_category,sales_team.group_sale_salesman,1,1,1,1

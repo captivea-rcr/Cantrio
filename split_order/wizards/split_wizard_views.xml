@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_confirm_wizard_form_stock">
+        <field name="name">view.confirm.wizard.form.stock</field>
+        <field name="model">split.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="count"/>
+                </group>
+                <footer>
+                    <button name="yes_schedule" string="Apply" type="object"
+                            class="btn-primary"/>
+                    <button string="_Cancel" class="btn-secondary" special="cancel"/>
+
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="schedule_picking_wizard">
+        <field name="name">schedule.picking.wizard.view</field>
+        <field name="model">schedule.picking.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="schedule_date" required="1"/>
+                </group>
+                <footer>
+                    <button name="yes_schedule" string="Apply" type="object"
+                            class="btn-primary"/>
+                    <button string="_Cancel" class="btn-secondary" special="cancel"/>
+
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_confirm_wizard_form">
+        <field name="name">view.confirm.wizard.form</field>
+        <field name="model">schedule.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>Do You Want to Schedule a Delivery ?</p>
+                <footer>
+                    <button name="yes_schedule" string="Yes" type="object"
+                            class="btn-primary"/>
+                    <button name="no_schedule" string="No" type="object"
+                            class="btn-primary"/>
+                    <button string="_Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_schedule_wizard_form">
+        <field name="name">view.schedule.wizard.form</field>
+        <field name="model">schedule.delivery</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="schedule_lines" create="False">
+                    <form>
+                        <group>
+                            <field name="delivery_date" required="1"/>
+                        </group>
+                        <field name="main_lines">
+                            <tree editable="bottom" create="false">
+                                <field name="product_id" domain="[('id', 'in', context.get('product_ids', []))]" required="1"/>
+                                <field name="product_uom_qty" required="1"/>
+                                <field name="product_uom" required="1"/>
+                                <button name="refresh" string="Refresh" type="object"
+                                        class="btn-primary"/>
+                            </tree>
+                        </field>
+                    </form>
+                    <tree create="false">
+                        <field name="name" readonly="1"/>
+                    </tree>
+
+                </field>
+                <footer>
+                    <button name="action_confirm" string="Apply" type="object" class="btn-primary" context="{'schedule_delivery': id}"/>
+                    <button string="_Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

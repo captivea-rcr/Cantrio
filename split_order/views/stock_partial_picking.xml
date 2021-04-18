@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">Stock picking out Split button</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <field name ="state" position="before">
+<!--                <button name="split_picking"-->
+<!--                        states="draft,confirmed,assigned,waiting,hold,unscheduled"-->
+<!--                        string="Split"-->
+<!--                        groups="stock.group_stock_user"-->
+<!--                        type="object"/>-->
+                <button name="picking_split"
+                        states="draft,confirmed,assigned,waiting,hold,unscheduled"
+                        string="Split"
+                        groups="stock.group_stock_user"
+                        type="object"/>
+                <button name="remove_hold"
+                        states="hold"
+                        string="Remove Hold"
+                        groups="stock.group_stock_user"
+                        type="object"/>
+                <button name="schedule_picking"
+                        states="unscheduled"
+                        string="Schedule"
+                        groups="stock.group_stock_user"
+                        type="object"
+                        class="oe_highlight" />
+            </field>
+
+            <field name="scheduled_date" position="replace">
+                <field name="scheduled_date2" string="Schedule Date" readonly="0" attrs="{'invisible': [('state', '=', 'unscheduled')]}"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="stock.vpicktree" model="ir.ui.view">
+        <field name="name">vpicktree</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" decoration-danger="state not in ('cancel', 'done') and scheduled_date2 &lt; current_date" string="Picking list">
+                <field name="name"/>
+                <field name="location_dest_id" groups="stock.group_stock_multi_locations"/>
+                <field name="partner_id"/>
+                <field name="date" invisible="1"/>
+                <field name="scheduled_date2" attrs="{'invisible': [('state', '=', 'unscheduled')]}"/>
+                <field name="origin"/>
+                <field name="group_id" invisible="1"/>
+                <field name="backorder_id"/>
+                <field name="state"/>
+                <field name="priority" invisible="1"/>
+                <field name="picking_type_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_schedule_wizard_form_stock">
+        <field name="name">view.schedule.wizard.form.stock</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="schedule_lines" create="false">
+                    <form>
+                        <group>
+                            <field name="delivery_date" required="1"/>
+                        </group>
+                        <field name="main_lines">
+                            <tree editable="bottom" create="false">
+                                <field name="product_id" domain="[('id', 'in', context.get('product_ids1', []))]" required="1"/>
+                                <field name="product_uom_qty" required="1"/>
+                                <field name="product_uom" required="1"/>
+                                <button name="refresh" string="Refresh" type="object"
+                                        class="btn-primary"/>
+                            </tree>
+                        </field>
+
+                    </form>
+                    <tree create="false">
+                        <field name="name" readonly="1"/>
+                    </tree>
+
+                </field>
+                <footer>
+                    <button name="split_process" string="Apply" type="object" class="btn-primary" context="{'schedule_delivery': id}"/>
+                    <button string="_Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_picking_internal_search_custom" model="ir.ui.view">
+        <field name="name">stock.picking.internal.search.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search" />
+        <field name="arch" type="xml">
+            <filter name="waiting" position="after">
+                <filter name="unscheduled" string="Unscheduled" domain="[('state','in',('unscheduled', 'hold'))]" help="Unscheduled/Hold Moves"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="action_picking_tree_unscheduled" model="ir.actions.act_window">
+        <field name="name">Unscheduled Transfers</field>
+        <field name="res_model">stock.picking</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form,calendar</field>
+        <field name="domain"></field>
+        <field name="context">{
+            'search_default_picking_type_id': [active_id],
+            'default_picking_type_id': active_id,
+            'contact_display': 'partner_address',
+            'search_default_unscheduled': 1,
+            }
+        </field>
+        <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define a new transfer
+            </p>
+        </field>
+    </record>
+
+    <record id="stock_picking_type_kanban_custom" model="ir.ui.view">
+        <field name="name">stock.picking.type.kanban.custom</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.stock_picking_type_kanban" />
+        <field name="arch" type="xml">
+            <field name="count_picking_ready" position="after">
+                <field name="count_picking_unscheduled"/>
+            </field>
+
+            <xpath expr="//div[@t-if='record.count_picking_backorders.raw_value > 0']" position="after">
+                <div t-if="record.count_picking_unscheduled.raw_value > 0" class="row">
+                    <div class="col-9">
+                        <a class="oe_kanban_stock_picking_type_list" name="get_action_picking_tree_unscheduled" type="object">
+                            Unscheduled
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <field name="count_picking_unscheduled"/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

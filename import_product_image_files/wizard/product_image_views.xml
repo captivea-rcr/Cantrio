@@ -1,0 +1,68 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_generate_img_wizard">
+            <field name="name">Import Product Images/Files</field>
+            <field name="model">generate.image</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form col="4" string="Import Product Images/Files">
+                    <group>
+                        <field name="field_id" required="1" 
+                            domain="[('model','=','product.template'),('name','in',['image','files'])]"
+                            options="{'no_create':True}"
+                            placeholder="Default: product image" />
+                        <field name="image_path" />
+                    </group>
+                    <footer>
+                        <button special="cancel" string="_Cancel"/>
+                        <button name="generate_image" string="Generate" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_generate_image">
+            <field name="name">Import Product Images/Files</field>
+            <field name="res_model">generate.image</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_generate_img_wizard" />
+        </record>
+
+        <menuitem action="action_generate_image" id="menu_generate_image" parent="stock.menu_stock_inventory_control" sequence="199"/>
+
+        <record id="view_notification_success" model="ir.ui.view">
+            <field name="name">Notification</field>
+            <field name="model">generate.image</field>
+            <field name="arch" type="xml">
+                <form string="Import Completed">
+                    <h2>
+                        The process is completed.
+                    </h2>
+                    <h3>
+                        <group>
+                            <field name="success" readonly="1"/>
+                            <field name="failed" readonly="1"/>
+                        </group>
+                    </h3>
+                    <footer>
+                        <div>
+                            <button special="cancel" string="OK" class="oe_highlight"/>
+                        </div>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_notification_success" model="ir.actions.act_window">
+            <field name="name">Notification</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">generate.image</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

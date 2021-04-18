@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_schedule_wizard,access.schedule.wizard,model_schedule_wizard,sales_team.group_sale_salesman,1,1,1,1
+access_schedule_delivery,access.schedule.delivery,model_schedule_delivery,sales_team.group_sale_salesman,1,1,1,1
+access_schedule_wizard_line,access.schedule.wizard.line,model_schedule_wizard_line,sales_team.group_sale_salesman,1,1,1,1
+access_schedule_delivery_line,access.schedule.delivery.line,model_schedule_delivery_line,sales_team.group_sale_salesman,1,1,1,1
+access_split_wizard,access.split.wizard,model_split_wizard,sales_team.group_sale_salesman,1,1,1,1
+access_schedule_wizard_line_stock,access.schedule.wizard.line.stock,model_schedule_wizard_line_stock,sales_team.group_sale_salesman,1,1,1,1

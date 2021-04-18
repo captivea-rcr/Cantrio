@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="picking_split_form_view" model="ir.ui.view">
+        <field name="name">picking.split.form</field>
+        <field name="model">picking.split</field>
+        <field name="arch" type="xml">
+            <form string="Split Delivery">
+                <group>
+                    <group>
+                        <field name="delivery_number" attrs="{'readonly': [('initial_split_done','=',True)]}"/>
+                        <field name="picking_id" invisible="1"/>
+                        <field name="initial_split_done" invisible="1"/>
+                    </group>
+                    <group>
+                        <field name="max_delivery" readonly="1"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Delivery 1" attrs="{'invisible': [('delivery_1','=',[])]}">
+                        <group>
+                            <field name="delivery_1_note"/>
+                            <field name="deliver_1_date" attrs="{'required': [('delivery_1','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_1">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 2" attrs="{'invisible': [('delivery_2','=',[])]}">
+                        <group>
+                            <field name="delivery_2_note"/>
+                            <field name="deliver_2_date" attrs="{'required': [('delivery_2','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_2">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 3" attrs="{'invisible': [('delivery_3','=',[])]}">
+                        <group>
+                            <field name="delivery_3_note"/>
+                            <field name="deliver_3_date" attrs="{'required': [('delivery_3','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_3">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 4" attrs="{'invisible': [('delivery_4','=',[])]}">
+                        <group>
+                            <field name="delivery_4_note"/>
+                            <field name="deliver_4_date" attrs="{'required': [('delivery_4','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_4">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 5" attrs="{'invisible': [('delivery_5','=',[])]}">
+                        <group>
+                            <field name="delivery_5_note"/>
+                            <field name="deliver_5_date" attrs="{'required': [('delivery_5','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_5">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 6" attrs="{'invisible': [('delivery_6','=',[])]}">
+                        <group>
+                            <field name="delivery_6_note"/>
+                            <field name="deliver_6_date" attrs="{'required': [('delivery_6','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_6">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 7" attrs="{'invisible': [('delivery_7','=',[])]}">
+                        <group>
+                            <field name="delivery_7_note"/>
+                            <field name="deliver_7_date" attrs="{'required': [('delivery_7','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_7">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 8" attrs="{'invisible': [('delivery_8','=',[])]}">
+                        <group>
+                            <field name="delivery_8_note"/>
+                            <field name="deliver_8_date" attrs="{'required': [('delivery_8','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_8">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 9" attrs="{'invisible': [('delivery_9','=',[])]}">
+                        <group>
+                            <field name="delivery_9_note"/>
+                            <field name="deliver_9_date" attrs="{'required': [('delivery_9','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_9">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Delivery 10" attrs="{'invisible': [('delivery_10','=',[])]}">
+                        <group>
+                            <field name="delivery_10_note"/>
+                            <field name="deliver_10_date" attrs="{'required': [('delivery_10','!=',[])]}"/>
+                        </group>
+                        <field name="delivery_10">
+                            <tree editable="bottom" decoration-danger="product_qty_left &lt; 0.0" create="false">
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_qty_left" readonly="1"/>
+                                <field name="product_uom" readonly="1"/>
+                                <button name="ship_remaining" string="Ship remaining" type="object"
+                                        class="btn-link"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="generate_deliveries" string="Split" type="object"
+                            class="btn-primary" attrs="{'invisible': [('initial_split_done','=',True)]}"/>
+                    <button name="split_delivery" string="Confirm Split" type="object"
+                            class="btn-primary" attrs="{'invisible': [('initial_split_done','=',False)]}"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

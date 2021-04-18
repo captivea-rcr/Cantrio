@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="res_partner_dummy_vendor" model="res.partner">
+            <field name="name">Vendor TBC</field>
+            <field name="supplier">1</field>
+            <field name="customer">0</field>
+            <field name="is_company">1</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="email">dummy_vendor@example.com</field>
+        </record>
+    </data>
+</odoo>

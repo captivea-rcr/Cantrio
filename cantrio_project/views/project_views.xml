@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="edit_project_stage" model="ir.ui.view">
+        <field name="name">project.project.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group>
+                    <field name="developer_id"/>
+                    <field name="designer_id"/>
+                </group>
+            </xpath>
+            <field name="user_id" position="after">
+                <field name="project_stage"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="project.view_task_tree2" model="ir.ui.view">
+        <field name="name">project.task.tree</field>
+        <field name="model">project.task</field>
+        <field eval="2" name="priority"/>
+        <field name="arch" type="xml">
+            <tree decoration-bf="message_needaction==True" decoration-danger="date_deadline and (date_deadline&lt;current_date)" string="Tasks" editable="bottom">
+                <field name="message_needaction" invisible="1"/>
+                <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                <field name="task_done"/>
+                <field name="date_deadline"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="developer_id"/>
+                <field name="designer_id"/>
+                <field name="stage_id"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Project Task Kanban View -->
+    <record id="view_task_kanban" model="ir.ui.view">
+        <field name="name">project.task.kanban</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_kanban_bottom_right']" position="replace">
+                <div class="oe_kanban_bottom_right">
+                    <field name="task_done" invisible="1"/>
+                    <a name="action_task_done_toggle" type="object">
+                        <div style="background-color: green; padding: 10px; border-radius: 5px; border: 2px green solid;" attrs="{'invisible': [('task_done', '=', False)]}">
+                        </div>
+                        <div style="padding: 10px; border-radius: 5px; border: 2px grey solid;" attrs="{'invisible': [('task_done', '!=', False)]}">
+                        </div>
+                    </a>
+                    <!--                    <span>Done: <field name="task_done" widget="boolean_toggle"/></span>-->
+                </div>
+            </xpath>
+            <xpath expr="//div[@class='oe_kanban_bottom_left']/field[@name='priority']" position="replace">
+                <a name="action_get_attachments" type="object">
+                    <span title='Attachments' style="font-size: 20px"><i class='fa fa-paperclip' role="img" aria-label="Attachments"/>
+                    </span>
+                </a>
+            </xpath>
+            <xpath expr="//div[@class='oe_kanban_bottom_left']/field[@name='activity_ids']" position="replace">
+                <a name="action_change_deadline" type="object">
+                    <span title='Change deadline' style="font-size: 20px"><i class='fa fa-clock-o' role="img" aria-label="Change deadline"/>
+                    </span>
+                </a>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project Task FORM View -->
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="name">project.task.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="requires_attachment"/>
+            </field>
+            <field name="date_deadline" position="after">
+                <field name="date_complete"/>
+            </field>
+            <xpath expr="//page[@name='extra_info']" position="before">
+                <page name="attachments" string="Attachments">
+                    <field name="attachment_ids" widget="many2many_binary" string="Attachments"/>
+                </page>
+            </xpath>
+            <field name="priority" position="replace"/>
+        </field>
+    </record>
+
+    <record id="view_project_kanban_custom" model="ir.ui.view" >
+        <field name="name">project.project.kanban.custom</field>
+        <field name="model">project.project</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors" on_create="project.open_create_project">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="color"/>
+                <field name="task_count"/>
+                <field name="label_tasks"/>
+                <field name="alias_id"/>
+                <field name="alias_name"/>
+                <field name="alias_domain"/>
+                <field name="is_favorite"/>
+                <field name="percentage_satisfaction_project"/>
+                <field name="rating_status"/>
+                <field name="project_stage"/>
+                <field name="task_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon">
+
+                            <div class="o_kanban_card_content">
+                                <div style="width:100%: display:inline-block;">
+                                    <div class="o_primary" style="text-align: center">
+                                        <h2><t t-esc="record.name.value"/></h2>
+                                    </div>
+
+                                    <div style="width:100%: display:inline-block;">
+                                        <span t-if="record.partner_id.value">
+                                            <span>Customer: <strong><t t-esc="record.partner_id.value"/></strong></span><br/>
+                                        </span>
+                                        <span>Current stage: <strong><t t-esc="record.project_stage.value"/></strong></span>
+                                        <table style="width: 100%">
+                                            <t t-foreach="record.task_ids.raw_value" t-as="t">
+
+                                                <t t-if="t.stage_id[0] == record.project_stage.raw_value">
+
+                                                    <tr t-if="t.task_done" style="background-color: #0eb80b; padding: 5px;">
+                                                        <td>
+                                                            <span t-esc="t.name"/>
+                                                        </td>
+                                                        <td style="text-align: right">
+                                                            <span  t-if="t.date_complete" t-esc="t.date_complete.split(' ')[0]"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr t-if="!t.task_done and (t.date_deadline gt moment(new Date()).format('YYYY-MM-DD') or !t.date_deadline)" style="background-color: yellow">
+                                                        <td>
+                                                            <span t-esc="t.name"/>
+                                                        </td>
+                                                        <td style="text-align: right">
+                                                            <span t-if="t.date_deadline" t-esc="t.date_deadline"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr t-if="!t.task_done and t.date_deadline lt moment(new Date()).format('YYYY-MM-DD')" style="background-color: #ff5252">
+                                                        <td>
+                                                            <span t-esc="t.name"/>
+                                                        </td>
+                                                        <td style="text-align: right">
+                                                            <span t-esc="t.date_deadline"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="o_project_kanban_boxes">
+                                <a class="o_project_kanban_box" name="%(project.act_project_project_2_project_task_all)d" type="action">
+                                    <div>
+                                        <span class="o_value"><t t-esc="record.task_count.value"/></span>
+                                        <span class="o_label"><t t-esc="record.label_tasks.value"/></span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="project_template_tree" model="ir.ui.view" >
+        <field name="name">project.template.tree</field>
+        <field name="model">project.template</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="project_template_form" model="ir.ui.view" >
+        <field name="name">project.template.form</field>
+        <field name="model">project.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>
+                        <field name="name" placeholder="Project Name"/>
+                    </h1>
+                    <separator string="Stages"/>
+                    <field name="type_ids">
+                        <tree>
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                        </tree>
+                    </field>
+                    <separator string="Tasks"/>
+                    <field name="task_ids">
+                        <tree editable="bottom" context="{'default_template_id': active_id}">
+                            <field name="template_id" invisible="1"/>
+                            <field name="name"/>
+                            <field name="deadline_days"/>
+                            <field name="stage_domain_ids" invisible="1"/>
+                            <field name="stage_id" domain="[('id','in', stage_domain_ids)]"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="project_template_task_tree" model="ir.ui.view" >
+        <field name="name">project.template.task.tree</field>
+        <field name="model">project.template.task</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="deadline_days"/>
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="project_template_task_form" model="ir.ui.view" >
+        <field name="name">project.template.task.form</field>
+        <field name="model">project.template.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="template_id"/>
+                        <field name="name"/>
+                        <field name="deadline_days"/>
+                        <field name="stage_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="action_project_template" model="ir.actions.act_window" >
+        <field name="name">Project Templates</field>
+        <field name="res_model">project.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_project_templates" name="Project Templates" parent="project.menu_project_config"
+              sequence="1" action="cantrio_project.action_project_template"/>
+
+</odoo>

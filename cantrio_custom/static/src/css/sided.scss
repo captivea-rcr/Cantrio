@@ -1,0 +1,126 @@
+// Normal views
+.o_content, .modal-content {
+    max-width: 100%;
+
+    // Form views
+    .o_form_view {
+        .o_form_sheet {
+            max-width: calc(100% - 32px);
+        }
+
+        @include media-breakpoint-down(sm) {
+            min-width: auto;
+
+            // Avoid overflow on forms with title and/or button box
+            .oe_button_box,
+            .oe_title,
+            {
+                max-width: 100%;
+            }
+
+            // Avoid overflow on modals
+            .o_form_sheet {
+                min-width: auto;
+            }
+
+            // Render website inputs properly in phones
+            .o_group .o_field_widget.o_text_overflow {
+                // Overrides another !important
+                width: auto !important;
+            }
+
+            // Make all input groups vertical
+            .o_group_col_6 {
+                width: 100%;
+            }
+
+            // Statusbar buttons dropdown for mobiles
+            .o_statusbar_buttons_dropdown {
+                border: {
+                    bottom: 0;
+                    radius: 0;
+                    top: 0;
+                }
+                height: 100%;
+            }
+            .o_statusbar_buttons > .btn {
+                border-radius: 0;
+                border: 0;
+                width: 100%;
+                margin-bottom: 0.2rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            .o_statusbar_status {
+                // Arrow from rightmost button exceeds allowed width
+                .o_arrow_button:first-child::before {
+                    content: none;
+                    display: none;
+                }
+            }
+
+            // Full width in form sheets
+            .o_form_sheet,
+            .oe_chatter,
+            {
+                min-width: auto;
+                max-width: 98%;
+            }
+
+            // Settings pages
+            .app_settings_block {
+                .row {
+                    margin: 0;
+                }
+            }
+        }
+    }
+
+    // Sided chatter, if user wants
+    .o_chatter_position_sided & {
+        @include media-breakpoint-up(md) {
+            .o_form_view:not(.o_form_nosheet) {
+                display: flex;
+                flex-flow: row nowrap;
+                height: 100%;
+
+                .o_form_sheet_bg {
+                    flex: 1 1 60%;
+                    overflow: auto;
+
+                    > .o_form_sheet {
+                        min-width: unset;
+                    }
+                }
+
+                .o_chatter {
+                    border-left: 1px solid gray('400');
+                    flex: 1 1 40%;
+                    max-width: 50%;
+                    min-width: 30%;
+                    overflow: auto;
+
+                    .o_chatter_header_container {
+                        padding-top: $grid-gutter-width * 0.5;
+                        top: 0;
+                        position: sticky;
+                        background-color: $o-view-background-color;
+                        z-index: 1;
+
+                        .o_chatter_topbar {
+                            margin-top: 0;
+                        }
+
+                        .o_attachments_previews {
+                            overflow: auto;
+                            max-height: $o-mail-attachment-image-size * 6;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_all_pickings_ready" model="ir.actions.act_window">
+            <field name="name">Ready</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="context">{'search_default_available': True}</field>
+        </record>
+
+        <record id="action_all_pickings_waiting" model="ir.actions.act_window">
+            <field name="name">Waiting</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="context">{'search_default_waiting': True}</field>
+        </record>
+
+        <record id="action_all_pickings_late" model="ir.actions.act_window">
+            <field name="name">Late</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain">[('scheduled_date','&lt;', time.strftime('%Y-%m-%d %H:%M:%S')), ('state', 'in', ('assigned', 'waiting', 'confirmed'))]</field>
+            <field name="context">{'search_default_late': True}</field>
+        </record>
+
+        <record id="action_all_pickings_unscheduled" model="ir.actions.act_window">
+            <field name="name">Unscheduled</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="context">{'search_default_unscheduled': True}</field>
+        </record>
+
+        <record id="action_all_pickings_done" model="ir.actions.act_window">
+            <field name="name">Unscheduled</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="context">{'search_default_done': True}</field>
+        </record>
+
+        <!-- Root menu for all warehouses -->
+        <menuitem id="menu_stock_all_warehouses"
+                  parent="stock.menu_stock_root" name="All Warehouses"
+                  sequence="2"/>
+
+        <menuitem id="menu_stock_all_warehouses_ready"
+                  parent="menu_stock_all_warehouses" name="Ready"
+                  sequence="1" action="action_all_pickings_ready"/>
+
+        <menuitem id="menu_stock_all_warehouses_waiting"
+                  parent="menu_stock_all_warehouses" name="Waiting"
+                  sequence="2" action="action_all_pickings_waiting"/>
+
+        <menuitem id="menu_stock_all_warehouses_late"
+                  parent="menu_stock_all_warehouses" name="Late"
+                  sequence="3" action="action_all_pickings_late"/>
+
+        <menuitem id="menu_stock_all_warehouses_unscheduled"
+                  parent="menu_stock_all_warehouses" name="Unscheduled"
+                  sequence="4" action="action_all_pickings_unscheduled"/>
+
+        <menuitem id="menu_stock_all_warehouses_done"
+                  parent="menu_stock_all_warehouses" name="Done"
+                  sequence="5" action="action_all_pickings_done"/>
+
+    </data>
+</odoo>

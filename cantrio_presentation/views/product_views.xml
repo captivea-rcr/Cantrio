@@ -1,0 +1,82 @@
+<odoo>
+    <data>
+
+        <record id="inherit_product_custom_presentation" model="ir.ui.view">
+            <field name="name">inherit.product.custom.presentation</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='description']" position="after">
+                    <separator string="Presentation description"/>
+                    <field name="description_presentation"/>
+                    <separator string="Features"/>
+                    <field name="product_features"/>
+                </xpath>
+                <field name="categ_id" position="before">
+                    <field name="pres_category_id" options="{'no_create_edit':True,'no_create':True}" />
+                </field>
+
+                <!--                <field name="description_sale" position="after">-->
+                <!--                    <field name="product_features"/>-->
+                <!--                </field>-->
+                <field name="product_variant_id" position="after">
+                    <field name="ada"/>
+                    <field name="cupc"/>
+                    <field name="water_sense"/>
+                    <field name="green_guard"/>
+                </field>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="inherit_product_custom_presentation_director">
+            <field name="name">Product Template Only Custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="inherit_product_custom_presentation"/>
+            <field name="groups_id" eval="[(4, ref('cantrio_custom.group_sale_director'))]"/>
+            <field name="arch" type="xml">
+                <field name="pres_category_id" position="attributes">
+                    <attribute name="options">{'no_create_edit':False,'no_create':False}</attribute>
+                    <!-- <field name="categ_id" string="Product Category" options="'no_create_edit':True" /> -->
+                </field>
+            </field>
+        </record>
+
+         <record id="product_presentation_category_action" model="ir.actions.act_window">
+            <field name="name">Presentation categories</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.presentation.category</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <record id="product_presentation_category_form_view" model="ir.ui.view">
+            <field name="name">product.presentation.form.view</field>
+            <field name="model">product.presentation.category</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_presentation_category_tree_view" model="ir.ui.view">
+            <field name="name">product.presentation.tree.view</field>
+            <field name="model">product.presentation.category</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+         <menuitem id="product_presentation_category_menu"
+                  name="Presentation categories"
+                  parent="sale.menu_sale_config"
+                  action="product_presentation_category_action"/>
+
+
+    </data>
+</odoo>

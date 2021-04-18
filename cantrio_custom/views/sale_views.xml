@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Disable child Product menuitems -->
+        <menuitem id="sale.menu_product_template_action" sequence="1" active="False"/>
+        <menuitem id="sale.menu_products" sequence="2" active="False"/>
+        <!-- Override Pricelists menuitem -->
+        <menuitem id="sale.menu_product_pricelist_main" name="Pricelists" parent="sale.menu_sale_config" action="product.product_pricelist_action2" groups="product.group_sale_pricelist" sequence="3"/>
+
+
+        <record model="ir.ui.view" id="order_form_cantrio">
+            <field name="name">order.form.cantrio</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale_total']" position="replace">
+                    <group>
+                        <group>
+                            <field name="tax_ids" widget="many2many_tags" attrs="{'readonly':[('state','not in',['draft','sent'])]}" domain="[('type_tax_use','=','sale')]" />
+                            <field name="terms"/>
+                        </group>
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                            <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                <label for="amount_total"/>
+                            </div>
+                            <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                    <field name="developer_id"/>
+                    <field name="designer_id"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='price_unit']" position="before">
+                    <field name="cost_ldp" groups="cantrio_custom.group_sale_director"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_product_search" model="ir.ui.view">
+            <field name="name">sale.report.search</field>
+            <field name="model">sale.report</field>
+            <field name="inherit_id" ref="sale.view_order_product_search"/>
+            <field name="arch" type="xml">
+                <field name="country_id" position="after">
+                    <field name="developer_id"/>
+                    <field name="designer_id"/>
+                </field>
+                <xpath expr="//filter[@name='User']" position="after">
+                    <filter string="Developer" name="developer_id" context="{'group_by':'developer_id'}"/>
+                    <filter string="Designer" name="designer_id" context="{'group_by':'designer_id'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

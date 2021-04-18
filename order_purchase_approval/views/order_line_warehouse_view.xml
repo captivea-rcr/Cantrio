@@ -1,0 +1,77 @@
+<odoo>
+<data>
+    <record id="open_order_line_warehouse_detail_form" model="ir.ui.view">
+        <field name="name">Details</field>
+        <field name="model">order.line.warehouse</field>
+        <field name="arch" type="xml">
+            <form string="Details">
+                <sheet>
+                    <separator />
+                    <group>
+                        <group string="Product Demand">
+                            <field name="product_id" readonly="1" />
+                            <field name="total_order_qty" readonly="1" />
+                        </group>
+                        <group>
+                        </group>
+                        <separator string="Details" />
+                        <field name="order_detail_ids" colspan="2" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="partner_id" />
+                                <field name="project_name" />
+                                <field name="order_id" />
+                                <field name="order_quantity" />
+                                <field name="expected_date" />
+                            </tree>
+                        </field>
+                        <group string="Warehouses">
+                            <field name="stock_njcb" />
+                            <field name="stock_njcbr" />
+                            <field name="stock_njt" />
+                            <field name="stock_laipn" />
+                            <field name="stock_seam" />
+                        </group>
+                        <group string="PO, RFQ, In Transit &amp; Supply">
+                            <field name="total_rfq" />
+                            <field name="total_po" />
+                            <field name="total_transit" />
+                            <field name="remaining_demand" />
+                            <field name="approved_quantity" required="1" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="order_line_warehouse_tree_view" model="ir.ui.view">
+        <field name="name">Order Line Warehouse</field>
+        <field name="model">order.line.warehouse</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_id" readonly="1" />
+                <field name="total_order_qty" readonly="1" />
+                <field name="stock_njcb" />
+                <field name="stock_njcbr" />
+                <field name="stock_njt" />
+                <field name="stock_laipn" />
+                <field name="stock_seam" />
+                <field name="total_rfq" />
+                <field name="total_po" />
+                <field name="total_transit" />
+                <field name="remaining_demand" />
+                <field name="approved_quantity" />
+                <button name="action_detail" type="object" class="oe_highlight" string="Detail" />
+                <button name="generate_rfq" type="object" class="oe_highlight" string="RFQ" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_order_line_warehouse">
+        <field name="name">Order Line Warehouse</field>
+        <field name="res_model">order.line.warehouse</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="order_purchase_approval.order_line_warehouse_tree_view"/>
+    </record>
+</data>
+</odoo>
