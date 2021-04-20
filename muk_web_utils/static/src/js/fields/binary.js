@@ -1,19 +1,22 @@
 /**********************************************************************************
-* 
-*    Copyright (C) 2017 MuK IT GmbH
+*
+*    Copyright (c) 2017-2019 MuK IT GmbH.
+*
+*    This file is part of MuK Web Utils 
+*    (see https://mukit.at).
 *
 *    This program is free software: you can redistribute it and/or modify
-*    it under the terms of the GNU Affero General Public License as
-*    published by the Free Software Foundation, either version 3 of the
-*    License, or (at your option) any later version.
+*    it under the terms of the GNU Lesser General Public License as published by
+*    the Free Software Foundation, either version 3 of the License, or
+*    (at your option) any later version.
 *
 *    This program is distributed in the hope that it will be useful,
 *    but WITHOUT ANY WARRANTY; without even the implied warranty of
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU Affero General Public License for more details.
+*    GNU Lesser General Public License for more details.
 *
-*    You should have received a copy of the GNU Affero General Public License
-*    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*    You should have received a copy of the GNU Lesser General Public License
+*    along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **********************************************************************************/
 
@@ -29,11 +32,11 @@ var registry = require('web.field_registry');
 var _t = core._t;
 var QWeb = core.qweb;
 
-fields.FieldBinaryFile.include({
+fields.FieldBinaryFile.extend({
 	willStart: function () {
 		var def = this._rpc({
             route: '/config/muk_web_utils.binary_max_size',
-        }).done(function(result) {
+        }).then(function(result) {
         	this.max_upload_size = result.max_upload_size * 1024 * 1024;
         }.bind(this));
 		return this._super.apply(this, arguments);
@@ -68,7 +71,7 @@ var FieldBinarySize = fields.FieldFloat.extend({
 	   	var options = _.extend({},
 	   		this.nodeOptions,
 	   		{ data: this.recordData },
-	   		this.formatOptions,
+	   		this.formatOptions
 	   	);
    		return utils.format['binary_size'](value, this.field, options)
    },

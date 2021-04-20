@@ -1,19 +1,22 @@
 ###################################################################################
 #
-#    Copyright (C) 2017 MuK IT GmbH
+#    Copyright (c) 2017-2019 MuK IT GmbH.
+#
+#    This file is part of MuK Web Utils 
+#    (see https://mukit.at).
 #
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
+#    it under the terms of the GNU Lesser General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
+#    GNU Lesser General Public License for more details.
 #
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU Lesser General Public License
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ###################################################################################
 
@@ -47,18 +50,17 @@ class ResConfigSettings(models.TransientModel):
     #----------------------------------------------------------
     # Functions
     #----------------------------------------------------------
-    
-    #@api.multi
+
     def set_values(self):
         res = super(ResConfigSettings, self).set_values()
-        param = self.env['ir.config_parameter'].sudo()
+        param = self.env['ir.config_parameter'].with_user(self.env.ref('base.user_admin'))
         param.set_param('muk_web_utils.binary_max_size', self.binary_max_size)
         return res
 
     @api.model
     def get_values(self):
         res = super(ResConfigSettings, self).get_values()
-        params = self.env['ir.config_parameter'].sudo()
+        params = self.env['ir.config_parameter'].with_user(self.env.ref('base.user_admin'))
         res.update(binary_max_size=int(params.get_param('muk_web_utils.binary_max_size', 25)))
         return res
     
@@ -66,7 +68,7 @@ class ResConfigSettings(models.TransientModel):
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
         ret_val = super(ResConfigSettings, self).fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
-        modules = self.env['ir.module.module'].sudo().search([]).mapped('name')
+        modules = self.env['ir.module.module'].with_user(self.env.ref('base.user_admin')).search([]).mapped('name')
         document = etree.XML(ret_val['arch'])
         for field in ret_val['fields']:
             if field.startswith("module_") and field[len("module_"):] not in modules:

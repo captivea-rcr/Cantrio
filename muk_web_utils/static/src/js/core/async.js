@@ -1,19 +1,22 @@
 /**********************************************************************************
-* 
-*    Copyright (C) 2017 MuK IT GmbH
+*
+*    Copyright (c) 2017-2019 MuK IT GmbH.
+*
+*    This file is part of MuK Web Utils 
+*    (see https://mukit.at).
 *
 *    This program is free software: you can redistribute it and/or modify
-*    it under the terms of the GNU Affero General Public License as
-*    published by the Free Software Foundation, either version 3 of the
-*    License, or (at your option) any later version.
+*    it under the terms of the GNU Lesser General Public License as published by
+*    the Free Software Foundation, either version 3 of the License, or
+*    (at your option) any later version.
 *
 *    This program is distributed in the hope that it will be useful,
 *    but WITHOUT ANY WARRANTY; without even the implied warranty of
 *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*    GNU Affero General Public License for more details.
+*    GNU Lesser General Public License for more details.
 *
-*    You should have received a copy of the GNU Affero General Public License
-*    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*    You should have received a copy of the GNU Lesser General Public License
+*    along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **********************************************************************************/
 
@@ -34,7 +37,7 @@ var syncLoop = function(items, func, callback) {
 var syncProgress = function(items, func, callback, update) {
 	var progress = 0;
 	items.reduce(function(promise, item) {
-	    return promise.done(function() {
+	    return promise.then(function() {
 	    	update(++progress / items.length);
 	    	return func(item);
 	    });
@@ -69,7 +72,7 @@ var syncNotification = function(widget, title, items, func, callback) {
 	var notification = createNotification(widget, title);
 	var update = _.partial(updateNotification, widget, notification);
 	syncProgress(items, func, function() {
-		$.when(closeNotification(widget, notification)).then(callback);
+		Promise.resolve(closeNotification(widget, notification)).then(callback);
 	}, update);
 };
 
