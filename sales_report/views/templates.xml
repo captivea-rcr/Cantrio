@@ -61,6 +61,10 @@
                     <strong>Quotation Date:</strong>
                     <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>
                 </div>
+                <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto col-3 mw-100 mb-2" name="expiration_date">
+                    <strong>Expiration:</strong>
+                    <p class="m-0" t-field="doc.validity_date"/>
+                </div>
                 <div class="col-3  mb-2">
                     <strong>Valid Until:</strong>
                     <p class="m-0" t-field="doc.validity_date"/>

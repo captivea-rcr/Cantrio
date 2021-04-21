@@ -63,6 +63,12 @@ class Product(models.Model):
 
 
 class Invoice(models.Model):
-    _inherit = 'account.invoice'
+    _inherit = 'account.move'
 
     project_name = fields.Char(track_visibility='onchange')
+
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    product_image = fields.Binary('Product Image', related="product_id.image_1920", store=False, readonly=True)

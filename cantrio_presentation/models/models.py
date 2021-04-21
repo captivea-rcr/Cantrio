@@ -62,7 +62,6 @@ class Presentation(models.Model):
             view = self.env.ref('sale.view_order_form')
             return {
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'sale.order',
                 'views': [(view.id, 'form')],
@@ -147,7 +146,7 @@ class ProductLine(models.Model):
     sequence = fields.Integer('Sequence')
     product_id = fields.Many2one('product.product', string="Product", required=True)
     category_id = fields.Many2one('product.category', string='Category', related='product_id.categ_id')
-    product_image = fields.Binary(related='product_id.image', readonly=True, string="Image")
+    product_image = fields.Binary(related='product_id.image_1920', readonly=True, string="Image")
     product_qty = fields.Integer('Quantity')
     price = fields.Float('Price')
     presentation_id = fields.Many2one('presentation')
