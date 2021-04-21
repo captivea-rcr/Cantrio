@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
-###################################################################################
+#############################################################################
 #
 #    Cybrosys Technologies Pvt. Ltd.
-#    Copyright (C) 2017-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
-#    Author: fasluca(<https://www.cybrosys.com>)
 #
-#    This program is free software: you can modify
-#    it under the terms of the GNU Affero General Public License (AGPL) as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
+#    Copyright (C) 2019-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Faslu Rahman(odoo@cybrosys.com)
+#
+#    You can modify it under the terms of the GNU AFFERO
+#    GENERAL PUBLIC LICENSE (AGPL v3), Version 3.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
+#    GNU AFFERO GENERAL PUBLIC LICENSE (AGPL v3) for more details.
 #
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#    You should have received a copy of the GNU AFFERO GENERAL PUBLIC LICENSE
+#    (AGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
 #
-###################################################################################
+#############################################################################
 
 from odoo import api, fields, models
 
@@ -35,7 +35,7 @@ class sale_discount(models.Model):
         ('cancel', 'Cancelled'),
         ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='draft')
 
-    #@api.multi
+
     def action_confirm(self):
         discnt = 0.0
         no_line = 0.0
@@ -49,7 +49,7 @@ class sale_discount(models.Model):
                 return True
         super(sale_discount, self).action_confirm()
 
-    #@api.multi
+
     def action_approve(self):
         super(sale_discount, self).action_confirm()
         return True
@@ -75,7 +75,7 @@ class ResDiscountSettings(models.TransientModel):
 
     so_double_validation = fields.Selection(related='company_id.so_double_validation',string="Levels of Approvals *", readonly=False)
     so_double_validation_limit = fields.Float(string="Discount limit requires approval in %",
-                                              related='company_id.so_double_validation_limit')
+                                              related='company_id.so_double_validation_limit', readonly=False)
 
     def set_values(self):
         super(ResDiscountSettings, self).set_values()
