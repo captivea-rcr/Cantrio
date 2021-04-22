@@ -375,7 +375,7 @@ class StockPicking(models.Model):
     @api.depends('full')
     def _compute_scheduled_date2(self):
         if not self.full and self.move_lines:
-            self.scheduled_date2 = min(self.move_lines.mapped('date_expected'))
+            self.scheduled_date2 = min(self.move_lines.mapped('date'))
 
     #@api.multi
     def remove_hold(self):
@@ -523,7 +523,7 @@ class StockPicking(models.Model):
                     # 'route_ids': [(4, route.id) for route in values.get('route_ids', [])],
                     'warehouse_id': backorder_picking.sale_id.warehouse_id.id,
                     'date': fields.Datetime.now(),
-                    'date_expected': line.wizard_line_id.delivery_date,
+                    'date': line.wizard_line_id.delivery_date,
                     # 'propagate': self.propagate,
                     # 'priority': values.get('priority', "1"),
                     'picking_id': backorder_picking.id,

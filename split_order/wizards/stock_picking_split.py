@@ -136,7 +136,7 @@ class PickingSplit(models.TransientModel):
                 'group_id': self.picking_id.group_id.id,
                 'warehouse_id': picking.sale_id.warehouse_id.id,
                 'date': fields.Datetime.now(),
-                'date_expected': date,
+                'date': date,
                 'picking_id': picking.id,
             }
             move = self.env['stock.move'].sudo().with_context(
