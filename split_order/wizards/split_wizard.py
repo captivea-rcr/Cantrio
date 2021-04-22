@@ -17,7 +17,7 @@ class ScheduleWizard(models.TransientModel):
             if picking:
                 for move in picking.move_ids_without_package:
                     print(str(self.schedule_date))
-                    picking.move_lines.write({'state': 'waiting', 'date_expected':  str(self.schedule_date)})
+                    picking.move_lines.write({'state': 'waiting'})
 
 
 class SplitWizard(models.TransientModel):
@@ -45,7 +45,6 @@ class SplitWizard(models.TransientModel):
 
             return {
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'stock.picking',
                 'views': [(view.id, 'form')],

@@ -21,7 +21,7 @@ class ScheduleWizard(models.TransientModel):
             if picking:
                 for move in picking.move_ids_without_package:
                     print(str(self.schedule_date))
-                    picking.move_lines.write({'state': 'waiting', 'date_expected':  str(self.schedule_date)})
+                    picking.move_lines.write({'state': 'waiting'})
 
 
 class SplitWizard(models.TransientModel):
@@ -49,7 +49,6 @@ class SplitWizard(models.TransientModel):
 
             return {
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'stock.picking',
                 'views': [(view.id, 'form')],
@@ -373,8 +372,7 @@ class StockPicking(models.Model):
             picking.show_check_availability = picking.is_locked and picking.state in ('confirmed', 'waiting', 'assigned', 'unscheduled') and has_moves_to_reserve
 
 
-    @api.one
-    @api.depends('full', 'move_lines.date_expected')
+    @api.depends('full')
     def _compute_scheduled_date2(self):
         if not self.full and self.move_lines:
             self.scheduled_date2 = min(self.move_lines.mapped('date_expected'))
@@ -415,7 +413,6 @@ class StockPicking(models.Model):
         ctx['picking_id'] = self.id
         return {
             'type': 'ir.actions.act_window',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'schedule.picking.wizard',
             'views': [(view.id, 'form')],
@@ -437,7 +434,6 @@ class StockPicking(models.Model):
             ctx['picking_id'] = self.id
             return {
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'split.wizard',
                 'views': [(view.id, 'form')],
@@ -461,7 +457,6 @@ class StockPicking(models.Model):
             return {
                 'name': 'Split Delivery',
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'picking.split',
                 'views': [(view.id, 'form')],
@@ -553,7 +548,6 @@ class StockPicking(models.Model):
 class PickingType(models.Model):
     _inherit = "stock.picking.type"
 
-    @api.one
     def _compute_picking_unscheduled(self):
         res = self.env['stock.picking'].search_count([('state', 'in', ('unscheduled', 'hold')),
                  ('picking_type_id', 'in', self.ids)])

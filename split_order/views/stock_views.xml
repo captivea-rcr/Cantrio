@@ -6,7 +6,6 @@
             <field name="name">Ready</field>
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,kanban,form,calendar</field>
             <field name="context">{'search_default_available': True}</field>
         </record>
@@ -15,7 +14,6 @@
             <field name="name">Waiting</field>
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,kanban,form,calendar</field>
             <field name="context">{'search_default_waiting': True}</field>
         </record>
@@ -24,7 +22,6 @@
             <field name="name">Late</field>
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,kanban,form,calendar</field>
             <field name="domain">[('scheduled_date','&lt;', time.strftime('%Y-%m-%d %H:%M:%S')), ('state', 'in', ('assigned', 'waiting', 'confirmed'))]</field>
             <field name="context">{'search_default_late': True}</field>
@@ -34,7 +31,6 @@
             <field name="name">Unscheduled</field>
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,kanban,form,calendar</field>
             <field name="context">{'search_default_unscheduled': True}</field>
         </record>
@@ -43,7 +39,6 @@
             <field name="name">Unscheduled</field>
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,kanban,form,calendar</field>
             <field name="context">{'search_default_done': True}</field>
         </record>

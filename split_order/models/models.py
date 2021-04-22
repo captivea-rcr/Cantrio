@@ -40,7 +40,6 @@ class ScheduleWizard(models.TransientModel):
                          'product_uom': line.product_uom.id, 'order_line': line.id})
             return {
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'schedule.delivery',
                 'views': [(view.id, 'form')],
@@ -185,7 +184,7 @@ class ScheduleDeliveryLine(models.TransientModel):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    product_image = fields.Binary('Product Image', related="product_id.image", store=False, readonly=True)
+    product_image = fields.Binary('Product Image', related="product_id.image_1920", store=False, readonly=True)
 
     #@api.multi
     def _action_launch_stock_rule(self):

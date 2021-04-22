@@ -29,8 +29,10 @@
                         type="object"
                         class="oe_highlight" />
             </field>
-
-            <field name="scheduled_date" position="replace">
+             <field name="scheduled_date" position="attributes">
+                 <attribute name="invisible">1</attribute>
+            </field>
+            <field name="scheduled_date" position="after">
                 <field name="scheduled_date2" string="Schedule Date" readonly="0" attrs="{'invisible': [('state', '=', 'unscheduled')]}"/>
             </field>
         </field>
@@ -105,7 +107,6 @@
         <field name="name">Unscheduled Transfers</field>
         <field name="res_model">stock.picking</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,kanban,form,calendar</field>
         <field name="domain"></field>
         <field name="context">{

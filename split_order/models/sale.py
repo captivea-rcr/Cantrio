@@ -28,7 +28,6 @@ class SaleOrder(models.Model):
         ctx['default_order_id'] = self.id
         return {
             'type': 'ir.actions.act_window',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'sale.order.schedule',
             'views': [(view.id, 'form')],
@@ -59,7 +58,6 @@ class SaleOrder(models.Model):
             ctx = self.env.context.copy()
             return {
                 'type': 'ir.actions.act_window',
-                'view_type': 'form',
                 'view_mode': 'form',
                 'res_model': 'sale.order',
                 'res_id': order.id,
