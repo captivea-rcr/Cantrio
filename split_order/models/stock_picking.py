@@ -353,13 +353,13 @@ class StockPicking(models.Model):
         states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
         help="Reference of the document")
     count = fields.Integer(default=0)
-    name = fields.Char( store=True, copy=False,  index=True,)
+    # name = fields.Char( store=True, copy=False,  index=True,)
     
     name_set = fields.Boolean()
 
-    _sql_constraints = [
-        ('name_uniq', 'unique(company_id)', 'Reference must be unique per company!'),
-    ]
+    # _sql_constraints = [
+    #     ('name_uniq', 'unique(company_id)', 'Reference must be unique per company!'),
+    # ]
 
     #@api.multi
     def _compute_show_check_availability(self):
