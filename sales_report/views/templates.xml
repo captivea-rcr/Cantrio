@@ -114,7 +114,7 @@
                         <tr t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
                             <t t-if="not line.display_type">
                                 <td>
-                                    <t t-if="line.product_id.image_medium"><img t-att-src="image_data_uri(line.product_id.image_medium)" /></t>
+                                    <t t-if="line.product_id.image_1920"><img t-att-src="image_data_uri(line.product_id.image_1920)" /></t>
                                 </td>
                                 <td><span t-field="line.name"/></td>
                                 <td class="text-right">
