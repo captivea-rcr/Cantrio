@@ -56,7 +56,7 @@ class Presentation(models.Model):
     def create_quote(self):
         so = self.env['sale.order'].create({'partner_id': self.partner_id.id, 'project_name': self.name})
         if so:
-            for line in self.product_line:
+            for line in self.product_line.filtered(lambda r: r.on_quote == True):
                 self.env['sale.order.line'].create({'product_id': line.product_id.id, 'order_id': so.id,
                     'product_uom_qty': line.product_qty, 'price_unit': line.price,})
             view = self.env.ref('sale.view_order_form')
@@ -141,7 +141,7 @@ class ProductLine(models.Model):
     @api.onchange('product_id')
     def onchange_product_id(self):
         if self.product_id:
-            self.price = self.product_id.list_price 
+            self.price = self.product_id.list_price
 
     sequence = fields.Integer('Sequence')
     product_id = fields.Many2one('product.product', string="Product", required=True)
@@ -152,3 +152,4 @@ class ProductLine(models.Model):
     presentation_id = fields.Many2one('presentation')
     pres_category_id = fields.Many2one(
         'product.presentation.category', string='Presentation Category', related='product_id.pres_category_id')
+    on_quote = fields.Boolean("On Quote")

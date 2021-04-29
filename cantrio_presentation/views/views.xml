@@ -46,8 +46,12 @@
                                     <field name="product_id"/>
                                     <field name="product_qty"/>
                                     <field name="price"/>
+                                    <field name="on_quote"/>
                                 </tree>
                             </field>
+                        </group>
+                        <group>
+                            <button name="preview_presentation" class="btn-primary" string="Generate PDF" type="object"/>
                         </group>
                     </sheet>
                 </form>
