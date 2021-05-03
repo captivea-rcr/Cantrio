@@ -390,7 +390,10 @@ class StockPicking(models.Model):
         if vals.get('origin', False):
             so = self.env['sale.order'].search([('name', '=', vals.get('origin'))])
             if so.max_delivery == 1 or so.max_delivery == 0:
-                vals['name'] = vals.get('origin')
+                if self._context.get('name'):
+                    vals['name'] = self._context.get('name')
+                else:
+                    vals['name'] = vals.get('origin')
             else:
                 vals['name'] = vals.get('origin')+"."+str(so.picking_seq)
                 so.picking_seq+=1

@@ -97,5 +97,29 @@
                 print_report_name="'Presentation - %s' % (object.name)"
                 paperformat="paperformat_us_custom"
         />
+
+        <record model="ir.ui.view" id="sales_report.form">
+            <field name="name">sales.report.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='customer_signature']" position="after">
+                    <page string="Presentation">
+                        <field name="product_lines">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="product_image" widget="image" class="oe_avatar"/>
+                                <field name="pres_category_id"/>
+                                <field name="category_id"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="price"/>
+                                <field name="on_quote"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
     </data>
 </odoo>

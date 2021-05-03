@@ -153,3 +153,33 @@ class ProductLine(models.Model):
     pres_category_id = fields.Many2one(
         'product.presentation.category', string='Presentation Category', related='product_id.pres_category_id')
     on_quote = fields.Boolean("On Quote")
+    sale_order_id = fields.Many2one("sale.order", "Sale Order")
+    
+    @api.model
+    def create(self, vals):
+        self.env['sale.order.line'].create({
+            'order_id': vals.get('sale_order_id'),
+            'product_id': vals.get('product_id'),
+            'product_uom_qty': vals.get('product_qty'),
+            'price_unit': vals.get('price'),
+        })
+        return super(ProductLine, self).create(vals)
+
+    def write(self, vals):
+        if vals.get('on_quote'):
+            self.env['sale.order.line'].create({
+                'order_id': vals.get('sale_order_id'),
+                'product_id': vals.get('product_id'),
+                'product_uom_qty': vals.get('product_qty'),
+                'price_unit': vals.get('price'),
+            })
+        elif not vals.get('on_quote'):
+            sale_line = self.env['sale.order.line'].search([('order_id', '=', self.sale_order_id.id), ('product_id', '=', self.product_id.id)])
+            sale_line.unlink()
+        return super(ProductLine, self).write(vals)
+
+
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    product_lines = fields.One2many('product.line', 'sale_order_id', string="Products")
