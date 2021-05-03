@@ -157,12 +157,13 @@ class ProductLine(models.Model):
     
     @api.model
     def create(self, vals):
-        self.env['sale.order.line'].create({
-            'order_id': vals.get('sale_order_id'),
-            'product_id': vals.get('product_id'),
-            'product_uom_qty': vals.get('product_qty'),
-            'price_unit': vals.get('price'),
-        })
+        if vals.get('on_quote'):
+            self.env['sale.order.line'].create({
+                'order_id': vals.get('sale_order_id'),
+                'product_id': vals.get('product_id'),
+                'product_uom_qty': vals.get('product_qty'),
+                'price_unit': vals.get('price'),
+            })
         return super(ProductLine, self).create(vals)
 
     def write(self, vals):

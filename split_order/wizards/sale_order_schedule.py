@@ -43,7 +43,6 @@ class SaleOrderSchedule(models.TransientModel):
         data = lines = self.env['sale.order.schedule.line']
         if self.order_id.state != 'sale':
             self.order_id.action_confirm()
-            picking = self.order_id.picking_ids
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
                 picking[0].write({'x_studio_contact_name': self.contact_name,
@@ -86,17 +85,11 @@ class SaleOrderSchedule(models.TransientModel):
     def make_delivery(self):
         if self.delivery_type == 'full':
             self.order_id.action_confirm()
-            picking = self.order_id.picking_ids.sorted(reverse=True)
-            if picking:
-                picking[0].write({'x_studio_contact_name': self.contact_name,
-                                  'x_studio_contact_phone_1': self.phone})
         else:
             self.order_id.action_confirm()
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
-                picking[0].write({'x_studio_contact_name': self.contact_name,
-                                  'x_studio_contact_phone_1': self.phone,
-                                  'state': 'hold'})
+                picking[0].write({'state': 'hold'})
                 for move in picking[0].move_ids_without_package:
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
                     move.product_uom_qty = s_line.do_qty
