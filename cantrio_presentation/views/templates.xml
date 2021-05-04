@@ -36,12 +36,11 @@
                 </style>
                 <div style="font-family: Segoe UI !important;">
                     <t t-if="doc.cover_image">
-                        <div
-                                style="max-height: 775px; object-fit: scale-down;overflow: hidden;">
-                            <img t-att-src="image_data_uri(doc.cover_image)"
-                                 style="page-break-after: always !important;"/>
-                        </div>
                         <center>
+                            <div style="object-fit: scale-down;overflow: hidden;">
+                                <img t-att-src="image_data_uri(doc.cover_image)" height="700px" width="700px"
+                                     style="page-break-after: always !important;"/>
+                            </div>
                             <span class="text-uppercase" style="font-size:1.97rem;" t-field="doc.name"/>
                             <br/>
                             <span class="text-uppercase" style="font-size:12pt;" t-field="doc.partner_id.name"/>
