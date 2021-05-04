@@ -89,8 +89,9 @@ class SaleOrderSchedule(models.TransientModel):
             self.order_id.action_confirm()
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
-                picking[0].write({'state': 'hold'})
+                picking[0].with_context({'picking_state': 'hold'})._compute_state()
                 for move in picking[0].move_ids_without_package:
+                    move.state = 'hold'
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
                     move.product_uom_qty = s_line.do_qty
 

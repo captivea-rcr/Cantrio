@@ -354,7 +354,46 @@ class StockPicking(models.Model):
         help="Reference of the document")
     count = fields.Integer(default=0)
     # name = fields.Char( store=True, copy=False,  index=True,)
-    
+
+    @api.depends('move_type', 'immediate_transfer', 'move_lines.state', 'move_lines.picking_id')
+    def _compute_state(self):
+        ''' State of a picking depends on the state of its related stock.move
+        - Draft: only used for "planned pickings"
+        - Waiting: if the picking is not ready to be sent so if
+          - (a) no quantity could be reserved at all or if
+          - (b) some quantities could be reserved and the shipping policy is "deliver all at once"
+        - Waiting another move: if the picking is waiting for another move
+        - Ready: if the picking is ready to be sent so if:
+          - (a) all quantities are reserved or if
+          - (b) some quantities could be reserved and the shipping policy is "as soon as possible"
+        - Done: if the picking is done.
+        - Cancelled: if the picking is cancelled
+        '''
+        for picking in self:
+            if not picking.move_lines:
+                picking.state = 'draft'
+            elif any(move.state == 'draft' for move in picking.move_lines):  # TDE FIXME: should be all ?
+                picking.state = 'draft'
+            elif all(move.state == 'cancel' for move in picking.move_lines):
+                picking.state = 'cancel'
+            elif all(move.state in ['cancel', 'done'] for move in picking.move_lines):
+                picking.state = 'done'
+            elif any(move.state == 'hold' for move in picking.move_lines):
+                picking.state = 'hold'
+                for move in picking.move_ids_without_package:
+                    move.state = 'hold'
+            else:
+                relevant_move_state = picking.move_lines._get_relevant_state_among_moves()
+                if picking.immediate_transfer and relevant_move_state not in ('draft', 'cancel', 'done'):
+                    picking.state = 'assigned'
+                elif relevant_move_state == 'partially_available':
+                    picking.state = 'assigned'
+                else:
+                    picking.state = relevant_move_state
+
+            if self._context.get("picking_state"):
+                picking.state = self._context.get("picking_state")
+
     name_set = fields.Boolean()
 
     # _sql_constraints = [

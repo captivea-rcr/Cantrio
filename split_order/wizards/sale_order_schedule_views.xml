@@ -22,9 +22,9 @@
                                     <tree editable="bottom" create="false">
                                         <field name="product_id"/>
                                         <field name="product_qty"/>
-                                        <field name="remaining_qty" attrs="{'invisible': [('parent.delivery_type', '=', 'reserve_qty')]}"/>
+                                        <field name="remaining_qty" attrs="{'column_invisible': [('parent.delivery_type', '=', 'reserve_qty')]}"/>
                                         <field name="do_qty"/>
-                                        <field name="onhand_qty" attrs="{'invisible': [('parent.delivery_type', '=', 'reserve_qty')]}"/>
+                                        <field name="onhand_qty" attrs="{'column_invisible': [('parent.delivery_type', '=', 'reserve_qty')]}"/>
                                     </tree>
                                 </field>
                             </page>
