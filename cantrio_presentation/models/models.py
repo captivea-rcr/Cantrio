@@ -169,10 +169,10 @@ class ProductLine(models.Model):
     def write(self, vals):
         if vals.get('on_quote'):
             self.env['sale.order.line'].create({
-                'order_id': vals.get('sale_order_id'),
-                'product_id': vals.get('product_id'),
-                'product_uom_qty': vals.get('product_qty'),
-                'price_unit': vals.get('price'),
+                'order_id': self.sale_order_id,
+                'product_id': self.product_id,
+                'product_uom_qty': self.product_qty,
+                'price_unit': self.price,
             })
         elif not vals.get('on_quote'):
             sale_line = self.env['sale.order.line'].search([('order_id', '=', self.sale_order_id.id), ('product_id', '=', self.product_id.id)])
