@@ -169,8 +169,8 @@ class ProductLine(models.Model):
     def write(self, vals):
         if vals.get('on_quote'):
             self.env['sale.order.line'].create({
-                'order_id': self.sale_order_id,
-                'product_id': self.product_id,
+                'order_id': self.sale_order_id.id,
+                'product_id': self.product_id.id,
                 'product_uom_qty': self.product_qty,
                 'price_unit': self.price,
             })
