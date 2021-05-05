@@ -184,3 +184,46 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     product_lines = fields.One2many('product.line', 'sale_order_id', string="Products")
+    presentation_name = fields.Char(required=True, string="Presentation Name")
+    cover_image = fields.Binary(string="Cover Page Image")
+    pre_date = fields.Date('Presentation Date')
+    group_by_category = fields.Boolean("Group by Category")
+    show_price = fields.Boolean('Show Price')
+    show_logo = fields.Boolean('Show Poduct Logo')
+
+    def preview_presentation(self):
+        return self.env.ref('cantrio_presentation.action_report_sale_presentation').report_action(self)
+
+    def get_unsorted_products(self):
+        page = 1
+        prod = 0
+        res = defaultdict(dict)
+        for p in self.product_lines:
+            prod += 1
+            if 'products' not in res[page]:
+                res[page] = defaultdict(dict)
+            res[page]['products'][p.id] = {
+                'product_id': p.product_id.id,
+                'name': p.product_id.name,
+                'image': p.product_image,
+                'product_qty': p.product_qty,
+                'price': p.price,
+                'presentation_id': p.presentation_id,
+                'description_presentation': p.product_id.description_presentation,
+                'ada': p.product_id.ada,
+                'cupc': p.product_id.cupc,
+                'water_sense': p.product_id.water_sense,
+                'green_guard': p.product_id.green_guard,
+            }
+            if prod == 3:
+                page += 1
+                prod = 0
+        return res
+
+    def get_feature_list(self, product):
+        text = ''
+        product = self.env['product.product'].browse(product)
+        if product.product_features:
+            text = product.product_features.split("\n")
+        return text
+

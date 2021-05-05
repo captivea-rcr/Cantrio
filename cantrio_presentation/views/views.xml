@@ -32,7 +32,6 @@
                                 <field name="pre_date"/>
                                 <field name="group_by_category"/>
                                 <field name="show_price"/>
-
                             </group>
                             <group>
                                 <field name="cover_image" widget="image"/>
@@ -98,6 +97,17 @@
                 paperformat="paperformat_us_custom"
         />
 
+        <report
+                id="action_report_sale_presentation"
+                string="Presentation"
+                model="sale.order"
+                report_type="qweb-pdf"
+                file="cantrio_presentation.sale_report_presentation"
+                name="cantrio_presentation.sale_report_presentation"
+                print_report_name="'Presentation - %s' % (object.presentation_name)"
+                paperformat="paperformat_us_custom"
+        />
+
         <record model="ir.ui.view" id="sales_report.form">
             <field name="name">sales.report.form</field>
             <field name="model">sale.order</field>
@@ -105,18 +115,34 @@
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='customer_signature']" position="after">
                     <page string="Presentation">
-                        <field name="product_lines">
-                            <tree editable="bottom">
-                                <field name="sequence" widget="handle"/>
-                                <field name="product_image" widget="image" class="oe_avatar"/>
-                                <field name="pres_category_id"/>
-                                <field name="category_id"/>
-                                <field name="product_id"/>
-                                <field name="product_qty"/>
-                                <field name="price"/>
-                                <field name="on_quote"/>
-                            </tree>
-                        </field>
+                        <sheet>
+                            <group>
+                                <group>
+                                    <field name="presentation_name"/>
+                                    <field name="pre_date"/>
+                                    <field name="group_by_category"/>
+                                    <field name="show_price"/>
+                                </group>
+                                <group>
+                                    <field name="cover_image" widget="image"/>
+                                </group>
+                                <field name="product_lines">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="product_image" widget="image" class="oe_avatar"/>
+                                        <field name="pres_category_id"/>
+                                        <field name="category_id"/>
+                                        <field name="product_id"/>
+                                        <field name="product_qty"/>
+                                        <field name="price"/>
+                                        <field name="on_quote"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group>
+                                <button name="preview_presentation" class="btn-primary" string="Generate PDF" type="object"/>
+                            </group>
+                        </sheet>
                     </page>
                 </xpath>
             </field>

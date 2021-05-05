@@ -12,5 +12,6 @@
         'views/product_views.xml',
         'views/views.xml',
         'views/templates.xml',
+        'views/sale_templates.xml',
     ],
 }
