@@ -227,3 +227,41 @@ class SaleOrder(models.Model):
             text = product.product_features.split("\n")
         return text
 
+    def get_sorted_products(self):
+        products = self.product_lines.sorted(key=lambda p: p.pres_category_id.name)
+        page = 1
+        prod = 0
+        last_categ = self.get_category(products[0].product_id)
+        current_categ = self.get_category(products[0].product_id)
+        res = defaultdict(dict)
+        for p in products:
+            current_categ = p.pres_category_id.name
+            if last_categ != current_categ:
+                page += 1
+                prod = 0
+                last_categ = current_categ
+            prod += 1
+            if 'products' not in res[page]:
+                res[page] = defaultdict(dict)
+                res[page]['category'] = current_categ
+            res[page]['products'][p.id] = {
+                'product_id': p.product_id.id,
+                'name': p.product_id.name,
+                'image': p.product_image,
+                'product_qty': p.product_qty,
+                'price': p.price,
+                'presentation_id': p.presentation_id,
+                'description_presentation': p.product_id.description_presentation,
+                'ada': p.product_id.ada,
+                'cupc': p.product_id.cupc,
+                'water_sense': p.product_id.water_sense,
+                'green_guard': p.product_id.green_guard,
+            }
+            if prod == 3:
+                page += 1
+                prod = 0
+                last_categ = current_categ
+                continue
+            last_categ = current_categ
+        return res
+
