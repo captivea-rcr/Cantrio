@@ -227,6 +227,19 @@ class SaleOrder(models.Model):
             text = product.product_features.split("\n")
         return text
 
+    def get_category(self, product):
+        category = False
+        category_name = ''
+        categ_id = product.categ_id
+        while(not category):
+            if categ_id.parent_id:
+                category = False
+                categ_id = categ_id.parent_id
+            else:
+                category = True
+                category_name = categ_id.name
+        return category_name
+
     def get_sorted_products(self):
         products = self.product_lines.sorted(key=lambda p: p.pres_category_id.name)
         page = 1
