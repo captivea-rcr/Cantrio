@@ -93,7 +93,7 @@ class SaleOrderSchedule(models.TransientModel):
                 for move in picking[0].move_ids_without_package:
                     move.state = 'hold'
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
-                    move.product_uom_qty = s_line.do_qty
+                    move.product_uom_qty = s_line.reserved_qty
 
 
 class SaleOrderScheduleLine(models.TransientModel):
@@ -103,6 +103,7 @@ class SaleOrderScheduleLine(models.TransientModel):
     product_qty = fields.Float("Order Quantity")
     remaining_qty = fields.Float("Remaining Order Qty", compute="_get_remaining_qty")
     do_qty = fields.Float("DO Quantity")
+    reserved_qty = fields.Float("Reserve Qty")
     onhand_qty = fields.Float("On hand Qty", related="product_id.qty_available")
     schedule_id = fields.Many2one("sale.order.schedule")
 
