@@ -128,7 +128,7 @@
                                 </group>
                                 <field name="product_lines">
                                     <tree editable="bottom">
-                                        <field name="sequence" widget="handle"/>
+                                        <field name="sequence"/>
                                         <field name="product_image" widget="image" class="oe_avatar"/>
                                         <field name="pres_category_id"/>
                                         <field name="category_id"/>
