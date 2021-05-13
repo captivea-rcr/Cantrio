@@ -143,7 +143,7 @@ class ProductLine(models.Model):
         if self.product_id:
             self.price = self.product_id.list_price
 
-    sequence = fields.Integer('Sequence', readonly=True, store=True)
+    sequence = fields.Integer('Sequence')
     product_id = fields.Many2one('product.product', string="Product", required=True)
     category_id = fields.Many2one('product.category', string='Category', related='product_id.categ_id')
     product_image = fields.Binary(related='product_id.image_1920', readonly=True, string="Image")
@@ -164,10 +164,7 @@ class ProductLine(models.Model):
                 'product_uom_qty': vals.get('product_qty'),
                 'price_unit': vals.get('price'),
             })
-        line = super(ProductLine, self).create(vals)
-        if self.env.context.get('keep_line_sequence'):
-            line.sale_order_id._reset_sequence()
-        return line
+        return super(ProductLine, self).create(vals)
 
     def write(self, vals):
         if vals.get('on_quote'):
@@ -281,29 +278,17 @@ class SaleOrder(models.Model):
             last_categ = current_categ
         return res
 
-    @api.depends('product_lines')
-    def _compute_max_line_sequence(self):
-        for sale in self:
-            sale.max_line_sequence = (
-                max(sale.mapped('product_lines.sequence') or [0]) + 1)
 
-    max_line_sequence = fields.Integer(
-        string='Max sequence in lines',
-        compute='_compute_max_line_sequence',
-        store=True)
+class SaleOrderLine(models.Model):
+    _inherit = "sale.order.line"
 
-    def _reset_sequence(self):
-        for rec in self:
-            current_sequence = 1
-            for line in rec.product_lines:
-                line.sequence = current_sequence
-                current_sequence += 1
-
-    def write(self, line_values):
-        res = super(SaleOrder, self).write(line_values)
-        self._reset_sequence()
+    @api.model
+    def create(self, vals):
+        res = super(SaleOrderLine, self).create(vals)
+        self.env['product.line'].create({
+            'sale_order_id': res.order_id.id,
+            'product_id': res.product_id.id,
+            'product_qty': res.product_uom_qty,
+            'price': res.price_unit,
+        })
         return res
-
-    def copy(self, default=None):
-        return super(SaleOrder,
-                     self.with_context(keep_line_sequence=True)).copy(default)

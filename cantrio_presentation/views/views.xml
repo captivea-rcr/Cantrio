@@ -127,7 +127,7 @@
                                     <field name="cover_image" widget="image"/>
                                 </group>
                                 <field name="product_lines">
-                                    <tree editable="bottom">
+                                    <tree editable="bottom" default_order="sequence asc">
                                         <field name="sequence"/>
                                         <field name="product_image" widget="image" class="oe_avatar"/>
                                         <field name="pres_category_id"/>
