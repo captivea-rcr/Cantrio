@@ -1,5 +1,3 @@
-
-
 from odoo import api, fields, models
 
 
@@ -54,7 +52,8 @@ class SaleOrderSchedule(models.TransientModel):
                 minus_line = self.schedule_line_ids.filtered(lambda r: r.product_id == line.product_id)
                 if line.product_uom_qty - minus_line.do_qty > 0:
                     lines |= data.create({'product_id': line.product_id.id,
-                                          'product_qty': line.product_uom_qty - minus_line.do_qty})
+                                          'product_qty': line.product_uom_qty - minus_line.do_qty,
+                                          'order_qty': line.product_uom_qty, })
             ctx['default_schedule_line_ids'] = [(6, 0, lines.ids)]
         else:
             picking = self.order_id.picking_ids.sorted(reverse=True)
@@ -69,7 +68,8 @@ class SaleOrderSchedule(models.TransientModel):
                 minus_line = self.schedule_line_ids.filtered(lambda r: r.product_id == line.product_id)
                 if line.product_uom_qty - minus_line.do_qty > 0:
                     lines |= data.create({'product_id': line.product_id.id,
-                                          'product_qty': minus_line.product_qty - minus_line.do_qty})
+                                          'product_qty': minus_line.product_qty - minus_line.do_qty,
+                                          'order_qty': line.product_uom_qty, })
             ctx['default_schedule_line_ids'] = [(6, 0, lines.ids)]
             ctx['default_delivery_type'] = 'split_delivery'
         return {
@@ -100,6 +100,7 @@ class SaleOrderScheduleLine(models.TransientModel):
     _name = 'sale.order.schedule.line'
 
     product_id = fields.Many2one("product.product")
+    order_qty = fields.Float("Order Quantity")
     product_qty = fields.Float("Order Quantity")
     remaining_qty = fields.Float("Remaining Order Qty", compute="_get_remaining_qty")
     do_qty = fields.Float("DO Quantity")

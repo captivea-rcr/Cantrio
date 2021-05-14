@@ -154,6 +154,7 @@ class ProductLine(models.Model):
         'product.presentation.category', string='Presentation Category', related='product_id.pres_category_id')
     on_quote = fields.Boolean("On Quote")
     sale_order_id = fields.Many2one("sale.order", "Sale Order")
+    created_from_so_line = fields.Boolean("created from so Line")
     
     @api.model
     def create(self, vals):
@@ -290,5 +291,6 @@ class SaleOrderLine(models.Model):
             'product_id': res.product_id.id,
             'product_qty': res.product_uom_qty,
             'price': res.price_unit,
+            'created_from_so_line': True,
         })
         return res

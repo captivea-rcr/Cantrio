@@ -29,7 +29,8 @@ class SaleOrder(models.Model):
         data = lines = self.env['sale.order.schedule.line']
         for line in self.order_line:
             lines |= data.create({'product_id': line.product_id.id,
-                                  'product_qty': line.product_uom_qty})
+                                  'product_qty': line.product_uom_qty,
+                                  'order_qty': line.product_uom_qty,})
         ctx['default_schedule_line_ids'] = [(6, 0, lines.ids)]
         return {
             'type': 'ir.actions.act_window',
