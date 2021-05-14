@@ -58,7 +58,7 @@ class Presentation(models.Model):
         if so:
             for line in self.product_line.filtered(lambda r: r.on_quote == True):
                 self.env['sale.order.line'].create({'product_id': line.product_id.id, 'order_id': so.id,
-                    'product_uom_qty': line.product_qty, 'price_unit': line.price,})
+                                                    'product_uom_qty': line.product_qty, 'price_unit': line.price,})
             view = self.env.ref('sale.view_order_form')
             return {
                 'type': 'ir.actions.act_window',
@@ -155,10 +155,10 @@ class ProductLine(models.Model):
     on_quote = fields.Boolean("On Quote")
     sale_order_id = fields.Many2one("sale.order", "Sale Order")
     created_from_so_line = fields.Boolean("created from so Line")
-    
+
     @api.model
     def create(self, vals):
-        if vals.get('on_quote'):
+        if vals.get('on_quote') and not vals.get('created_from_so_line'):
             self.env['sale.order.line'].create({
                 'order_id': vals.get('sale_order_id'),
                 'product_id': vals.get('product_id'),
@@ -168,7 +168,7 @@ class ProductLine(models.Model):
         return super(ProductLine, self).create(vals)
 
     def write(self, vals):
-        if vals.get('on_quote'):
+        if vals.get('on_quote') and not self.created_from_so_line:
             self.env['sale.order.line'].create({
                 'order_id': self.sale_order_id.id,
                 'product_id': self.product_id.id,
@@ -286,11 +286,14 @@ class SaleOrderLine(models.Model):
     @api.model
     def create(self, vals):
         res = super(SaleOrderLine, self).create(vals)
-        self.env['product.line'].create({
-            'sale_order_id': res.order_id.id,
-            'product_id': res.product_id.id,
-            'product_qty': res.product_uom_qty,
-            'price': res.price_unit,
-            'created_from_so_line': True,
-        })
+        lines = self.env['product.line'].search([('sale_order_id', '=', res.order_id.id),
+                                                 ('product_id', '=', res.product_id.id)])
+        if not lines:
+            self.env['product.line'].create({
+                'sale_order_id': res.order_id.id,
+                'product_id': res.product_id.id,
+                'product_qty': res.product_uom_qty,
+                'price': res.price_unit,
+                'created_from_so_line': True,
+            })
         return res
