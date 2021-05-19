@@ -21,8 +21,8 @@ class SaleOrder(models.Model):
         return res
 
     def action_schedule(self):
-        if not self.purchase_order:
-            raise UserError('Purchase Order is Required')
+        # if not self.purchase_order:
+        #     raise UserError('Purchase Order is Required')
         view = self.env.ref('split_order.sale_order_schedule_form')
         ctx = self.env.context.copy()
         ctx['default_order_id'] = self.id
