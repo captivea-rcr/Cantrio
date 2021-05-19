@@ -175,7 +175,7 @@ class ProductLine(models.Model):
                 'product_uom_qty': self.product_qty,
                 'price_unit': self.price,
             })
-        elif not vals.get('on_quote'):
+        elif vals.get('on_quote') == False:
             sale_line = self.env['sale.order.line'].search([('order_id', '=', self.sale_order_id.id), ('product_id', '=', self.product_id.id)])
             sale_line.unlink()
         return super(ProductLine, self).write(vals)
@@ -289,11 +289,14 @@ class SaleOrderLine(models.Model):
         lines = self.env['product.line'].search([('sale_order_id', '=', res.order_id.id),
                                                  ('product_id', '=', res.product_id.id)])
         if not lines:
-            self.env['product.line'].create({
+            new_line = self.env['product.line'].create({
                 'sale_order_id': res.order_id.id,
                 'product_id': res.product_id.id,
                 'product_qty': res.product_uom_qty,
                 'price': res.price_unit,
                 'created_from_so_line': True,
             })
+            old_lines = self.env['product.line'].search([('sale_order_id', '=', res.order_id.id)])
+            for line in old_lines - new_line:
+                line.sequence += 1
         return res
