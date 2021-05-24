@@ -13,6 +13,7 @@ class SaleOrderSchedule(models.TransientModel):
     contact_name = fields.Char("Contact name")
     address = fields.Char("Address")
     phone = fields.Char("Phone")
+    schedule_date = fields.Date("Scheduled Date")
 
     def done_delivery(self):
         if self.order_id.state != 'sale':
@@ -20,7 +21,8 @@ class SaleOrderSchedule(models.TransientModel):
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
                 picking[0].write({'x_studio_contact_name': self.contact_name,
-                                  'x_studio_contact_phone_1': self.phone})
+                                  'x_studio_contact_phone_1': self.phone,
+                                  'scheduled_date2': self.schedule_date})
                 for move in picking[0].move_ids_without_package:
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
                     move.product_uom_qty = s_line.do_qty
@@ -28,7 +30,8 @@ class SaleOrderSchedule(models.TransientModel):
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
                 picking[0].write({'x_studio_contact_name': self.contact_name,
-                                  'x_studio_contact_phone_1': self.phone})
+                                  'x_studio_contact_phone_1': self.phone,
+                                  'scheduled_date2': self.schedule_date})
                 picking = picking[0].with_context({'name': str(picking[-1].name) + '-' + str(len(picking))}).copy()
                 for move in picking.move_ids_without_package:
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
@@ -44,7 +47,8 @@ class SaleOrderSchedule(models.TransientModel):
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
                 picking[0].write({'x_studio_contact_name': self.contact_name,
-                                  'x_studio_contact_phone_1': self.phone})
+                                  'x_studio_contact_phone_1': self.phone,
+                                  'scheduled_date2': self.schedule_date})
                 for move in picking[0].move_ids_without_package:
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
                     move.product_uom_qty = s_line.do_qty
@@ -59,7 +63,8 @@ class SaleOrderSchedule(models.TransientModel):
             picking = self.order_id.picking_ids.sorted(reverse=True)
             if picking:
                 picking[0].write({'x_studio_contact_name': self.contact_name,
-                                  'x_studio_contact_phone_1': self.phone})
+                                  'x_studio_contact_phone_1': self.phone,
+                                  'scheduled_date2': self.schedule_date})
                 picking = picking[0].with_context({'name': str(picking[-1].name) + '-' + str(len(picking))}).copy()
                 for move in picking.move_ids_without_package:
                     s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
@@ -86,14 +91,25 @@ class SaleOrderSchedule(models.TransientModel):
         if self.delivery_type == 'full':
             self.order_id.action_confirm()
         else:
-            self.order_id.action_confirm()
-            picking = self.order_id.picking_ids.sorted(reverse=True)
-            if picking:
-                picking[0].with_context({'picking_state': 'hold'})._compute_state()
-                for move in picking[0].move_ids_without_package:
-                    move.state = 'hold'
-                    s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
-                    move.product_uom_qty = s_line.reserved_qty
+            if self.order_id.state != 'sale':
+                self.order_id.action_confirm()
+                picking = self.order_id.picking_ids.sorted(reverse=True)
+                if picking:
+                    picking[0].with_context({'picking_state': 'hold'})._compute_state()
+                    for move in picking[0].move_ids_without_package:
+                        move.state = 'hold'
+                        s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
+                        move.reserved_availability = s_line.reserved_qty
+            else:
+                picking = self.order_id.picking_ids.sorted(reverse=True)
+                if picking:
+                    picking = picking[0].with_context({'name': str(picking[-1].name) + '-' + str(len(picking))}).copy()
+                    picking[0].with_context({'picking_state': 'hold'})._compute_state()
+                    for move in picking.move_ids_without_package:
+                        move.state = 'hold'
+                        s_line = self.schedule_line_ids.filtered(lambda r: r.product_id == move.product_id)
+                        move.product_uom_qty = s_line.product_qty
+                        move.reserved_availability = s_line.reserved_qty
 
 
 class SaleOrderScheduleLine(models.TransientModel):
@@ -101,7 +117,7 @@ class SaleOrderScheduleLine(models.TransientModel):
 
     product_id = fields.Many2one("product.product")
     order_qty = fields.Float("Order Quantity")
-    product_qty = fields.Float("Order Quantity")
+    product_qty = fields.Float("Remaining Quantity")
     remaining_qty = fields.Float("Remaining Order Qty", compute="_get_remaining_qty")
     do_qty = fields.Float("DO Quantity")
     reserved_qty = fields.Float("Reserve Qty")

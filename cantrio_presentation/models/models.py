@@ -243,7 +243,7 @@ class SaleOrder(models.Model):
         return category_name
 
     def get_sorted_products(self):
-        products = self.product_lines.sorted(key=lambda p: p.pres_category_id.name)
+        products = self.product_lines.sorted(key=lambda p: p.pres_category_id.name if p.pres_category_id else 'False')
         page = 1
         prod = 0
         last_categ = self.get_category(products[0].product_id)

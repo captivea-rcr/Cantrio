@@ -95,30 +95,30 @@ class PickingSplit(models.TransientModel):
 
     #@api.multi
     def generate_deliveries(self):
-        if self.picking_id.sale_id.delivery_count + (self.delivery_number - 1) > self.picking_id.sale_id.max_delivery:
-            raise UserError(
-                _('Max delivery limit reached, please request approval.'))
-        else:
-            ctx = self.env.context.copy()
-            ctx['generate_deliveries'] = True
-            ctx['split_wizard_id'] = self.id
-            for x in range(0, self.delivery_number):
-                for l in self.picking_id.move_ids_without_package:
-                    self.env['picking.split.delivery.line'].create({
-                        'wizard_id': self.id,
-                        'nbr': x + 1,
-                        'product_id': l.product_id.id,
-                        'product_uom_qty': l.product_uom_qty / self.delivery_number,
-                        'product_uom': l.product_uom.id})
-            self.initial_split_done = True
-            return {
-                'type': 'ir.actions.act_window',
-                'res_model': 'picking.split',
-                'view_mode': 'form',
-                'context': ctx,
-                'target': 'new',
-                'res_id': self.id,
-            }
+        # if self.picking_id.sale_id.delivery_count + (self.delivery_number - 1) > self.picking_id.sale_id.max_delivery:
+        #     raise UserError(
+        #         _('Max delivery limit reached, please request approval.'))
+        # else:
+        ctx = self.env.context.copy()
+        ctx['generate_deliveries'] = True
+        ctx['split_wizard_id'] = self.id
+        for x in range(0, self.delivery_number):
+            for l in self.picking_id.move_ids_without_package:
+                self.env['picking.split.delivery.line'].create({
+                    'wizard_id': self.id,
+                    'nbr': x + 1,
+                    'product_id': l.product_id.id,
+                    'product_uom_qty': l.product_uom_qty / self.delivery_number,
+                    'product_uom': l.product_uom.id})
+        self.initial_split_done = True
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'picking.split',
+            'view_mode': 'form',
+            'context': ctx,
+            'target': 'new',
+            'res_id': self.id,
+        }
 
     def _create_moves(self, picking, delivery_lines, date):
         for line in delivery_lines:
@@ -139,14 +139,14 @@ class PickingSplit(models.TransientModel):
                 'date': date,
                 'picking_id': picking.id,
             }
-            move = self.env['stock.move'].sudo().with_context(
-                force_company=move_values.get('company_id', False)).create(
+            move = self.env['stock.move'].sudo().with_company(move_values.get('company_id', False)).create(
                 move_values)
             move._action_confirm()
         return True
 
     #@api.multi
     def split_delivery(self):
+        print("\n\nself.picking_id.sale_id====>", len(self.picking_id.sale_id.picking_ids))
         original_products = {}
         split_products = {}
         for line in self.picking_id.move_ids_without_package:
@@ -184,8 +184,10 @@ class PickingSplit(models.TransientModel):
                 if l.product_id == n.product_id:
                     l.product_uom_qty = n.product_uom_qty
         for x in range(1, self.delivery_number):
-            picking_copy = self.picking_id.copy({
-                'name': '/',
+            picking_copy = self.picking_id.with_context(
+                {'name': str(self.picking_id.sale_id.picking_ids[0].name) + '-' + str(len(self.picking_id.sale_id.picking_ids))}
+            ).copy({
+                'name': str(self.picking_id.sale_id.picking_ids[0].name) + '-' + str(len(self.picking_id.sale_id.picking_ids)),
                 'move_lines': [],
                 'move_line_ids': [],
                 'sale_id': self.picking_id.sale_id.id,

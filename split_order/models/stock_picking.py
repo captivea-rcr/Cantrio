@@ -468,45 +468,45 @@ class StockPicking(models.Model):
     def split_picking(self):
         # """Use to trigger the wizard from button with correct context"""
         
-        if self.sale_id.delivery_count >= self.sale_id.max_delivery:
-            raise UserError(_('Max delivery limit reached, please request approval.'))
-        else:
-            view = self.env.ref('split_order.view_confirm_wizard_form_stock')
-            ctx = self.env.context.copy()
-            ctx['picking_id'] = self.id
-            return {
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'split.wizard',
-                'views': [(view.id, 'form')],
-                'view_id': view.id,
-                'target': 'new',
-                'context': ctx,
-                
-            }
+        # if self.sale_id.delivery_count >= self.sale_id.max_delivery:
+        #     raise UserError(_('Max delivery limit reached, please request approval.'))
+        # else:
+        view = self.env.ref('split_order.view_confirm_wizard_form_stock')
+        ctx = self.env.context.copy()
+        ctx['picking_id'] = self.id
+        return {
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'split.wizard',
+            'views': [(view.id, 'form')],
+            'view_id': view.id,
+            'target': 'new',
+            'context': ctx,
+
+        }
 
     #@api.multi
     def picking_split(self, scheduling=False):
-        if self.sale_id.delivery_count >= self.sale_id.max_delivery:
-            raise UserError(
-                _('Max delivery limit reached, please request approval.'))
-        else:
-            view = self.env.ref('split_order.picking_split_form_view')
-            ctx = self.env.context.copy()
-            ctx['default_picking_id'] = self.id
-            ctx['default_delivery_number'] = scheduling and 1 or 2
-            ctx['scheduling'] = scheduling
-            return {
-                'name': 'Split Delivery',
-                'type': 'ir.actions.act_window',
-                'view_mode': 'form',
-                'res_model': 'picking.split',
-                'views': [(view.id, 'form')],
-                'view_id': view.id,
-                'target': 'new',
-                'context': ctx,
+        # if self.sale_id.delivery_count >= self.sale_id.max_delivery:
+        #     raise UserError(
+        #         _('Max delivery limit reached, please request approval.'))
+        # else:
+        view = self.env.ref('split_order.picking_split_form_view')
+        ctx = self.env.context.copy()
+        ctx['default_picking_id'] = self.id
+        ctx['default_delivery_number'] = scheduling and 1 or 2
+        ctx['scheduling'] = scheduling
+        return {
+            'name': 'Split Delivery',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'picking.split',
+            'views': [(view.id, 'form')],
+            'view_id': view.id,
+            'target': 'new',
+            'context': ctx,
 
-            }
+        }
 
     def split_process(self):
         products = {}
