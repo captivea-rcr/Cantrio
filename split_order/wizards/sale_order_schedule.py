@@ -7,7 +7,7 @@ class SaleOrderSchedule(models.TransientModel):
     order_id = fields.Many2one('sale.order', 'Order')
     delivery_type = fields.Selection([('full', 'Make DO'),
                                       ('split_delivery', 'Split Delivery'),
-                                      ('reserve_qty', 'Make Reservations')],
+                                      ('reserve_qty', 'Unscheduled')],
                                      stribng="Delivery Type", default='full')
     schedule_line_ids = fields.One2many("sale.order.schedule.line", "schedule_id")
     contact_name = fields.Char("Contact name")
