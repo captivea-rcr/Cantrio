@@ -25,7 +25,6 @@ class SaleOrder(models.Model):
         #     raise UserError('Purchase Order is Required')
         if self.x_studio_order_type == 'Retail Based Order':
             self.action_confirm()
-            print("\n\n===self.picking_ids====>", self.picking_ids)
             self.picking_ids[0].write({'x_studio_customer_purchase_order': self.purchase_order})
             po = self.env['purchase.order'].create({
                 'name': self.purchase_order,

@@ -146,7 +146,6 @@ class PickingSplit(models.TransientModel):
 
     #@api.multi
     def split_delivery(self):
-        print("\n\nself.picking_id.sale_id====>", len(self.picking_id.sale_id.picking_ids))
         original_products = {}
         split_products = {}
         for line in self.picking_id.move_ids_without_package:
