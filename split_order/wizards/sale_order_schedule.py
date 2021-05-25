@@ -103,7 +103,7 @@ class SaleOrderSchedule(models.TransientModel):
             else:
                 picking = self.order_id.picking_ids.sorted(reverse=True)
                 if picking:
-                    picking = picking[0].with_context({'name': str(picking[-1].name) + '-' + str(len(picking))}).copy()
+                    picking = picking[0].with_context({'name': str(picking[-1].name) + '.' + str(len(picking))}).copy()
                     picking[0].with_context({'picking_state': 'hold'})._compute_state()
                     for move in picking.move_ids_without_package:
                         move.state = 'hold'
