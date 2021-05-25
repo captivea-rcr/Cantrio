@@ -175,11 +175,11 @@ class ProductLine(models.Model):
     #             'product_uom_qty': self.product_qty,
     #             'price_unit': self.price,
     #         })
-        # elif vals.get('on_quote') == False:
-        #     sale_line = self.env['sale.order.line'].search([('order_id', '=', self.sale_order_id.id), ('product_id', '=', self.product_id.id)])
-        #     sale_line.unlink()
-
-        # return super(ProductLine, self).write(vals)
+    #      elif vals.get('on_quote') == False:
+    #          sale_line = self.env['sale.order.line'].search([('order_id', '=', self.sale_order_id.id), ('product_id', '=', self.product_id.id)])
+    #          sale_line.unlink()
+    #
+    #      return super(ProductLine, self).write(vals)
 
 
 class SaleOrder(models.Model):
