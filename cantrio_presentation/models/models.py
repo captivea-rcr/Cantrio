@@ -186,7 +186,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     product_lines = fields.One2many('product.line', 'sale_order_id', string="Products")
-    presentation_name = fields.Char(required=True, string="Presentation Name")
+    presentation_name = fields.Char(string="Presentation Name")
     cover_image = fields.Binary(string="Cover Page Image")
     pre_date = fields.Date('Presentation Date')
     group_by_category = fields.Boolean("Group by Category")
